@@ -1,0 +1,67 @@
+=================================================================================
+                 AUTHENTICATION MIDDLEWARE (AUTH CHECK) — SIMPLE NOTES
+=================================================================================
+
+WHAT IT DOES
+  Protects private routes (like /get-me) — only lets logged-in users with a 
+  valid, non-blacklisted token pass through.
+
+---------------------------------------------------------------------------------
+FLOW
+---------------------------------------------------------------------------------
+
+Request aati hai protected route pe
+        │
+        ▼
+Step 1: Cookie se token nikalo (req.cookies.token)
+        │
+        ▼
+Step 2: Token hai ya nahi check karo
+        ├── NAHI hai → 401 "Token not provided" (yahin ruk jaata hai)
+        │
+        └── HAI to aage badho
+                │
+                ▼
+Step 3: Blacklist mein check karo (DB query: tokenBlackListModel.findOne)
+        ├── Blacklist mein MILA → 401 "Invalid token.." (yahin ruk jaata hai)
+        │
+        └── Blacklist mein NAHI mila → aage badho
+                │
+                ▼
+Step 4: jwt.verify() se token ki signature check karo
+        ├── Invalid/expired → 401 "Invalid token" (catch block se)
+        │
+        └── Valid hai → aage badho
+                │
+                ▼
+Step 5: req.user = decodedToken (user ki info request mein attach ho gayi)
+        │
+        ▼
+Step 6: next() call karo → route handler ko control mil jaata hai
+        │
+        ▼
+[ 🟢 Protected route ka actual logic ab chalta hai ]
+
+---------------------------------------------------------------------------------
+STEPS BREAKDOWN
+---------------------------------------------------------------------------------
+Step 1: Token nikalo
+  - Kaam : Cookie se JWT token read karo (req.cookies.token)
+
+Step 2: Token hai ya nahi check karo
+  - Kaam : Dekho token present hai ya nahi
+  - Fail : 401 Unauthorized ("Token not provided. Unauthorized access, please login first")
+
+Step 3: Blacklist check karo
+  - Kaam : tokenBlackListModel mein query karo — check karo kya ye token pehle 
+           kisi logout mein revoke ho chuka hai
+  - Fail : Blacklist mein mile to 401 Unauthorized ("Invalid token..")
+
+Step 4: JWT signature verify karo
+  - Kaam : jwt.verify() se check karo token tamper toh nahi hua, expire toh nahi hua
+  - Fail : Invalid/expired ho to catch block se 401 Unauthorized ("Invalid token")
+
+Step 5: User info attach karo aur aage badho
+  - Kaam : Decoded token (userId, username) ko req.user mein daalo
+  - Pass : next() call karo, taaki actual route handler chal sake
+---------------------------------------------------------------------------------

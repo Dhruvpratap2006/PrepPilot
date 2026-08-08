@@ -8,7 +8,7 @@
 
 const { Router } = require('express');
 const authController = require('../controllers/auth.controllers');   
-
+const { authMiddleware } = require('../middlewares/auth.middleware');
 
 const authRouter = Router();
 
@@ -16,6 +16,7 @@ const authRouter = Router();
  * @route POST /api/auth/reister means req type post 
  * @description to register a new user
  * @access public 
+ *
  */
 authRouter.post("/register", authController.registerUserController);
 
@@ -32,6 +33,15 @@ authRouter.post("/login", authController.loginUserController)
  * @access public 
  */
 authRouter.get("/logout", authController.logoutUserController);
+
+// now we are going to setup one middleware to get-me which will tell the current user info
+/**
+ * @route GET/api/auth/get-me 
+ * @description to get current user info
+ * @access private
+ */
+
+authRouter.get("/get-me", authMiddleware, authController.getMeController)
 
 
 
