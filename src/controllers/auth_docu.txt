@@ -1,0 +1,156 @@
+Authentication Packages — Notes
+
+Hum apni authentication ke liye teen packages use kar rahe hain:
+
+bcryptjs
+cookie-parser
+jsonwebtoken
+
+1. bcryptjs
+
+bcryptjs ka use password ko hash form mein convert karne ke liye hota hai. Agar hum password ko directly database mein save karein aur kabhi DB leak ho jaye, to user ki confidential info (password) bhi leak ho jaayegi. Isse avoid karne ke liye hum bcrypt se password ko hash kar dete hain — hashing one-way hoti hai, matlab hash se wapas original password nikal nahi sakte. Login ke time entered password ko bcrypt.compare() se hash ke against check kiya jaata hai.
+
+javascript
+const hashedPassword = await bcrypt.hash(password, 10);   // signup
+const isMatch = await bcrypt.compare(enteredPassword, hashedPassword); // login
+
+2. jsonwebtoken (JWT) — User ko "login rehna" prove karne ke liye
+
+Login successful hone ke baad, server ek token banata hai jisme user ki info (jaise userId) 
+encoded hoti hai, aur ek secret key se sign kiya hota hai. 
+Ye token client ko de diya jaata hai, aur har request ke saath client ye token bhejta hai taaki server ko pata chale 
+"ye wahi logged-in user hai". Isse server ko baar-baar database check karke
+ session maintain nahi karna padta — token khud proof hai.
+
+javascript
+const token = jwt.sign({ userId }, SECRET_KEY, { expiresIn: "1d" }); // create
+const decoded = jwt.verify(token, SECRET_KEY); // verify
+
+3. cookie-parser — Client se aane wale token ko easily read karne ke liye
+
+JWT token ko hum login ke baad cookie ke form mein client ko bhejte hain. 
+Express by default incoming cookie ko samajh nahi pata (raw string hoti hai), 
+isliye cookie-parser middleware use karte hain jo cookie ko parse karke req.cookies object bana deta hai, 
+jisse aasani se cookie set/read ho sake.
+
+javascript
+app.use(cookieParser());
+res.cookie("token", token, { httpOnly: true }); // set
+const token = req.cookies.token; // read
+
+Overall Flow:
+
+Signup   → password → bcryptjs se hash → DB mein save
+Login    → entered password vs hash compare (bcrypt.compare) → match ho to JWT generate (jsonwebtoken)
+         → token ko cookie mein set (cookie-parser)
+Har request → cookie-parser se cookie read → jwt.verify() se token check → user authenticated
+
+
+User Registration Flow explained with simple diagram:
+=================================================================================
+                 USER REGISTRATION (SIGNUP) BACKEND WORKFLOW
+=================================================================================
+
+ [ CLIENT / FRONTEND ]
+         │
+         │  1. POST /api/v1/auth/register (username, email, password)
+         ▼
+ ┌─────────────────────────────────────────────────────────────────────────────┐
+ │  2. VALIDATE FIELDS                                                         │
+ │     └─ Check: Are username, email, and password present in req.body?        │
+ └──────────────────────┬──────────────────────────────────────────────────────┘
+                        │
+         ┌──────────────┴──────────────┐
+         │ Is any field missing?       │
+         └──────┬───────────────┬──────┘
+                │               │
+               YES              NO
+                │               │
+                ▼               ▼
+     [ ❌ 400 Bad Request ]   ┌────────────────────────────────────────────────┐
+     ("All fields required")  │  3. CHECK EXISTING USER                        │
+                              │     └─ Query: User.findOne({ $or: [...] })     │
+                              └─────────────────┬──────────────────────────────┘
+                                                │
+                                 ┌──────────────┴──────────────┐
+                                 │ Does user already exist?    │
+                                 └──────┬───────────────┬──────┘
+                                        │               │
+                                       YES              NO
+                                        │               │
+                                        ▼               ▼
+                             [ ❌ 400/409 Conflict ]  ┌────────────────────────┐
+                             ("User already exists")  │  4. HASH PASSWORD      │
+                                                      │     └─ bcrypt.hash(10) │
+                                                      └─────────┬──────────────┘
+                                                                │
+                                                                ▼
+                                                      ┌────────────────────────┐
+                                                      │  5. CREATE USER IN DB  │
+                                                      │     └─ User.create()   │
+                                                      └─────────┬──────────────┘
+                                                                │
+                                                                ▼
+                                                      ┌────────────────────────┐
+                                                      │  6. GENERATE JWT TOKEN │
+                                                      │     └─ jwt.sign()      │
+                                                      └─────────┬──────────────┘
+                                                                │
+                                                                ▼
+                                                      ┌────────────────────────┐
+                                                      │  7. SET COOKIE & RESP  │
+                                                      │     └─ res.cookie()    │
+                                                      │     └─ res.status(201) │
+                                                      └─────────┬──────────────┘
+                                                                │
+                                                                ▼
+                                                     [ ✅ 201 CREATED SUCCESS ]
+
+LogIN WORKFLOW
+=================================================================================
+                   USER LOGIN (AUTHENTICATION) BACKEND WORKFLOW
+=================================================================================
+
+ [ CLIENT / FRONTEND ]
+         │
+         │  1. POST /api/v1/auth/login (email, password)
+         ▼
+ ┌─────────────────────────────────────────────────────────────────────────────┐
+ │  2. FIND USER BY EMAIL                                                      │
+ │     └─ Query: userModel.findOne({ email })                                  │
+ └──────────────────────┬──────────────────────────────────────────────────────┘
+                        │
+         ┌──────────────┴──────────────┐
+         │ Does user exist in DB?      │
+         └──────┬───────────────┬──────┘
+                │               │
+               NO              YES
+                │               │
+                ▼               ▼
+     [ ❌ 400 Bad Request ]   ┌────────────────────────────────────────────────┐
+     ("Invalid email/pass")   │  3. VERIFY PASSWORD                            │
+                              │     └─ bcrypt.compare(password, user.password) │
+                              └─────────────────┬──────────────────────────────┘
+                                                │
+                                 ┌──────────────┴──────────────┐
+                                 │ Is password valid?          │
+                                 └──────┬───────────────┬──────┘
+                                        │               │
+                                       NO              YES
+                                        │               │
+                                        ▼               ▼
+                             [ ❌ 400 Bad Request ]   ┌────────────────────────┐
+                             ("Invalid email/pass")   │  4. GENERATE JWT TOKEN │
+                                                      │     └─ jwt.sign()      │
+                                                      └─────────┬──────────────┘
+                                                                │
+                                                                ▼
+                                                      ┌────────────────────────┐
+                                                      │  5. SET COOKIE & RESP  │
+                                                      │     └─ res.cookie()    │
+                                                      │     └─ res.status(200) │
+                                                      └─────────┬──────────────┘
+                                                                │
+                                                                ▼
+                                                     [ ✅ 200 LOGIN SUCCESS ]
+

@@ -7,17 +7,32 @@
 // all other releate apis in one group like this
 
 const { Router } = require('express');
-const authController = require('./controllers/auth.controllers');
+const authController = require('../controllers/auth.controllers');   
+
 
 const authRouter = Router();
 
 /**
- * now info of the apis
  * @route POST /api/auth/reister means req type post 
  * @description to register a new user
  * @access public 
  */
-
 authRouter.post("/register", authController.registerUserController);
+
+/**
+    * @route POST /api/auth/login 
+    * @description to login a user
+    * @access public 
+*/
+authRouter.post("/login", authController.loginUserController)
+
+/**
+ * @route GET /api/auth/logout
+ * @description to logout a user and to clear the token  from the browser and add the token in blacklist
+ * @access public 
+ */
+authRouter.get("/logout", authController.logoutUserController);
+
+
 
 module.exports = authRouter;
