@@ -10,3 +10,5 @@ npm-debug.log*
 
 # OS junk
 .DS_Store
+
+remaining.txt

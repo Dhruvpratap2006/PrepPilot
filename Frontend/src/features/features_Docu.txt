@@ -1,0 +1,9 @@
+basically we are going our folder structure in the form of features.
+
+In features we have auth_features folder in which we have all the 
+code of components reeated to authentication features
+
+pages folder will have all pages code 
+means in pages folder we are going to have the code of complete login and signup page
+
+and in components page we are going to have all the part of component code

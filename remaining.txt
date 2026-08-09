@@ -1,0 +1,6 @@
+we have to add the error page display like we use in roamio when user type wrong url that one
+
+funcitonality of google and github signup 
+
+some extrta feaures to make it unique
+like payment credits system some charts or graphs 

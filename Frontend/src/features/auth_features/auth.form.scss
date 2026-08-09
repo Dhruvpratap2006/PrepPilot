@@ -1,0 +1,350 @@
+// auth.form.scss
+// PrepPilot dark theme - floating card, split layout
+
+// ===== variables =====
+$bg-black: #050508;
+$card-bg: #0d0e1a;
+$panel-dark: #10111f;
+$input-bg: #1a1c2e;
+$border-color: #262838;
+$text-primary: #f4f4f6;
+$text-secondary: #8b8da3;
+$accent: #6366f1;
+$accent-hover: #4f46e5;
+$accent-glow: rgba(99, 102, 241, 0.25);
+
+// ===== page wrapper =====
+.auth-page {
+    min-height: 100vh;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: $bg-black;
+    font-family: 'Inter', -apple-system, sans-serif;
+    padding: 24px;
+}
+
+// ===== the floating card =====
+.auth-card {
+    width: 100%;
+    max-width: 1000px;
+    height: 640px;
+
+    display: flex;
+
+    background-color: $card-bg;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+// ===== left side - visual panel =====
+.branding-panel {
+    flex: 1;
+    position: relative;
+
+    background-color: #171b2e; // image ke background jaisa flat solid color
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+    gap: 20px;
+}
+
+.visual-blob {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+
+    background: radial-gradient(circle, #4338ca, transparent 70%);
+    filter: blur(80px);
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.mascot-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 180px;
+    height: 180px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .mascot-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 16px;
+    }
+}
+
+.branding-text {
+    position: relative;
+    z-index: 1;
+
+    h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: $text-primary;
+        line-height: 1.4;
+        margin-bottom: 12px;
+    }
+
+    p {
+        font-size: 14px;
+        color: $text-secondary;
+        line-height: 1.5;
+        max-width: 320px;
+    }
+}
+
+// ===== right side - form panel =====
+.form-panel {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 60px;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 380px;
+
+    .brand-icon {
+        color: $accent;
+        margin-bottom: 16px;
+    }
+
+    h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: $text-primary;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        color: $text-secondary;
+        margin-bottom: 28px;
+
+        a {
+            color: $accent;
+            font-weight: 600;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    // ===== input fields =====
+    .input-group {
+        margin-bottom: 14px;
+
+        input {
+            width: 100%;
+            padding: 13px 16px;
+            border-radius: 10px;
+            border: 1px solid $border-color;
+            background-color: $input-bg;
+            color: $text-primary;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+
+            &::placeholder {
+                color: #5c5e75;
+            }
+
+            &:focus {
+                border-color: $accent;
+            }
+        }
+    }
+
+    // ===== password field with eye icon =====
+    .password-wrapper {
+        position: relative;
+
+        input {
+            padding-right: 44px;
+        }
+
+        .toggle-pw {
+            position: absolute;
+            top: 50%;
+            right: 14px;
+            transform: translateY(-50%);
+
+            background: none;
+            border: none;
+            color: $text-secondary;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+
+            &:hover {
+                color: $accent;
+            }
+        }
+    }
+
+    // ===== submit button =====
+    .button {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .primary-button {
+        background-color: $accent;
+        color: #fff;
+
+        &:hover {
+            background-color: $accent-hover;
+        }
+
+        &:active {
+            transform: scale(0.98);
+        }
+    }
+
+    // ===== divider =====
+    .divider {
+        display: flex;
+        align-items: center;
+        margin: 24px 0;
+
+        &::before,
+        &::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid $border-color;
+        }
+
+        span {
+            padding: 0 12px;
+            font-size: 12px;
+            color: $text-secondary;
+        }
+    }
+
+    // ===== social auth buttons =====
+    .social-auth-buttons {
+        display: flex;
+        gap: 12px;
+
+        .btn-social {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+
+            padding: 13px 16px;
+            border-radius: 10px;
+            border: 1px solid $border-color;
+            background-color: $input-bg;
+            color: $text-primary;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+
+            svg {
+                flex-shrink: 0;
+            }
+
+            &:hover {
+                background-color: #232538;
+            }
+        }
+    }
+}
+
+// ===== responsive =====
+@media (max-width: 800px) {
+    .auth-card {
+        height: auto;
+    }
+
+    .branding-panel {
+        display: none;
+    }
+
+    .form-panel {
+        padding: 32px 24px;
+    }
+}
+
+.forgot-password {
+    text-align: right;
+    margin-bottom: 20px;
+    margin-top: -6px;
+
+    a {
+        font-size: 13px;
+        color: $accent;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.social-auth-buttons {
+    display: flex;
+    gap: 12px;
+
+    .btn-social {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        padding: 13px 12px;
+        border-radius: 10px;
+        border: 1px solid $border-color;
+        background-color: $input-bg;
+        color: $text-primary;
+        font-size: 12.5px; // thoda chhota kiya taaki lamba text bhi fit ho jaye
+        font-weight: 500;
+        cursor: pointer;
+        white-space: nowrap; // text ko wrap hone se rokega
+        transition: background-color 0.2s ease;
+
+        svg {
+            flex-shrink: 0;
+        }
+
+        &:hover {
+            background-color: #232538;
+        }
+    }
+}
