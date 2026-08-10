@@ -5,15 +5,37 @@ import { Grid2x2, Eye, EyeOff } from "lucide-react"
 import { FcGoogle } from "react-icons/fc"
 import { FaGithub } from "react-icons/fa"
 import loginImage from "../../../assets/images/authImages/LOGIN.png"
+import { useAuth } from "../hooks/useAuth"
 
 export const Login = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = (e) => {
+    const { loading , handleLogin} = useAuth();
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle login logic
+        await handleLogin({ email, password })
+        // as user gets succesfully login then we can navigete it to 
+        // home page
+        navigate('/');
     }
+
+    if (loading) {
+    return (
+        <div className="loading-screen">
+            <div className="loading-content">
+                <Grid2x2 className="loading-brand-icon" size={32} />
+                <div className="loader"></div>
+                <p>Logging in...</p>
+            </div>
+        </div>
+    )
+}
 
     return (
         <main className="auth-page">
@@ -47,13 +69,21 @@ export const Login = () => {
                         <form onSubmit={handleSubmit}>
                             {/* Email */}
                             <div className="input-group">
-                                <input type="email" id="email" name="email" placeholder="Enter your email" required />
+                                <input 
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    type="email" 
+                                    id="email" 
+                                    name="email" 
+                                    placeholder="Enter your email" 
+                                    required 
+                                />
                             </div>
 
                             {/* Password */}
                             <div className="input-group">
                                 <div className="password-wrapper">
                                     <input 
+                                        onChange={(e) => setPassword(e.target.value)}
                                         type={showPassword ? "text" : "password"} 
                                         id="password" 
                                         name="password" 
@@ -70,9 +100,9 @@ export const Login = () => {
                                 </div>
                             </div>
 
-                            <div className="forgot-password">
+                            {/* <div className="forgot-password">
                                 <Link to="/forgot-password">Forgot Password?</Link>
-                            </div>
+                            </div> */}
 
                             <button type="submit" className="button primary-button">Log in</button>
                         </form>

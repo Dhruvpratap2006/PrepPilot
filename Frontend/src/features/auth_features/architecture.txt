@@ -1,0 +1,33 @@
+Follows four layer Architecture for frontend authentication features:
+
+Layer 1: Presentation Layer (UI Layer)
+This layer's only job is to show things to the user on the screen. It doesn't worry about logic like "how do we talk to backend" — it just handles what the user sees and interacts with.
+components/ folder → small reusable UI pieces. Example: for authentication, this means the Login Form and Signup Form (just the input boxes, buttons, etc.)
+pages/ folder → full pages built using those components. Example: Login Page, Signup Page (these pages use the Login Form / Signup Form components inside them)
+Simple example: Think of components as LEGO blocks (form, button, input field) and pages as the final LEGO structure built from those blocks.
+
+Layer 2: Hooks Layer
+This is the middleman/connector layer. It manages:
+Talking to the State Management layer (getting/updating stored data)
+Talking to the Services/API layer (calling backend, handling response)
+Basically, your UI components don't directly call APIs or touch stored data — they call a hook, and the hook handles everything behind the scenes.
+Simple example: useLogin() hook — jab user login form submit karta hai, ye hook API ko call karega, response ko state mein save karega, aur UI ko batayega ki success hua ya error aaya.
+
+Layer 3: State Management Layer
+This layer is simply about storing data so it can be used across the app.
+Example: after login, user ki info (name, email, token) kahin store honi chahiye so that every page/component can access it without asking backend again and again.
+Tools used for this: Redux, Zustand, Context API, etc.
+ 
+Layer 4: Services Layer (API Layer)
+This layer is responsible for talking to the backend. All the actual API calls live here.
+Example endpoints: /register, /login, /logout, /get-me
+This layer's job:
+Send request to backend
+Get response (data) back
+Hand that raw response over to the Hooks layer, which then decides what to do with it (store it, show error, etc.)
+Quick Flow Example (Login):
+User types email/password in Login Form (Presentation Layer)
+Form submit karte hi, ek hook (useLogin) call hota hai (Hooks Layer)
+Hook calls the login API function from Services Layer, jo backend ke /login endpoint ko hit karta hai (Services Layer)
+Response aane ke baad, hook usse state mein save karta hai — jaise user info, token (State Management Layer)
+UI update ho jaati hai based on that state (wapas Presentation Layer mein dikhta hai)

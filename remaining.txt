@@ -1,3 +1,5 @@
+a good home page
+
 we have to add the error page display like we use in roamio when user type wrong url that one
 
 funcitonality of google and github signup 

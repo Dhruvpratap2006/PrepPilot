@@ -1,5 +1,6 @@
 import "../auth.form.scss"
 import { useNavigate, Link } from "react-router"
+import { useAuth } from "../hooks/useAuth"
 import { useState } from "react"
 import { Grid2x2, Eye, EyeOff } from "lucide-react"
 import { FcGoogle } from "react-icons/fc"
@@ -8,11 +9,31 @@ import registerImage from "../../../assets/images/authImages/register.png"
 
 export const Register = () => {
     const navigate = useNavigate();
-    const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = (e) => {
+    const {loading, handleRegister} = useAuth();
+
+    const [showPassword, setShowPassword] = useState(false);
+    const[username, setUsername] = useState("");
+    const[email, setEmail] = useState("");
+    const[password, setPassword] = useState("");
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle register logic
+        await handleRegister({username, email, password})
+        navigate("/")
+    }
+
+    if (loading) {
+        return (
+            <div className="loading-screen">
+                <div className="loading-content">
+                    <Grid2x2 className="loading-brand-icon" size={32} />
+                    <div className="loader"></div>
+                    <p>Creating account...</p>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -48,18 +69,33 @@ export const Register = () => {
                         <form onSubmit={handleSubmit}>
                             {/* Username */}
                             <div className="input-group">
-                                <input type="text" id="username" name="username" placeholder="Enter your username" required />
+                                <input 
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    type="text" 
+                                    id="username" 
+                                    name="username" 
+                                    placeholder="Enter your username" 
+                                    required 
+                                />
                             </div>
 
                             {/* Email */}
                             <div className="input-group">
-                                <input type="email" id="email" name="email" placeholder="Enter your email" required />
+                                <input 
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    type="email" 
+                                    id="email" 
+                                    name="email" 
+                                    placeholder="Enter your email" 
+                                    required 
+                                />
                             </div>
 
                             {/* Password */}
                             <div className="input-group">
                                 <div className="password-wrapper">
                                     <input 
+                                        onChange={(e) => setPassword(e.target.value)}
                                         type={showPassword ? "text" : "password"} 
                                         id="password" 
                                         name="password" 

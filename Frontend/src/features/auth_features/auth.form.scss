@@ -348,3 +348,49 @@ $accent-glow: rgba(99, 102, 241, 0.25);
         }
     }
 }
+
+.loading-screen {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f0f13; // apne dark theme ke background se match kar le
+
+    .loading-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+
+        .loading-brand-icon {
+            color: #6c5ce7; // apna brand/accent color daal de
+            animation: pulse 1.6s ease-in-out infinite;
+        }
+
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #6c5ce7;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        p {
+            color: #a0a0a8;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.92); }
+}
+
