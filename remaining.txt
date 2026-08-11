@@ -1,8 +1,89 @@
-a good home page
+Feature: Home Page
+Goal: Landing page banayenge jo PrepPilot ke core value ko highlight kare.
 
-we have to add the error page display like we use in roamio when user type wrong url that one
+Sections:
 
-funcitonality of google and github signup 
+Hero Section: Tagline + CTA button ("Get Started").
 
-some extrta feaures to make it unique
-like payment credits system some charts or graphs 
+Feature Highlights: Resume analysis, mock interview, skill gap, ATS resume.
+
+Testimonials / Stats Section: (Agar available ho).
+
+Theme: Dark theme continue karenge jaisa login/signup mein hai for consistency.
+
+Navigation: Navbar + Footer with proper links.
+
+Feature: Custom Error Page (404 / Wrong URL)
+Goal: Jab user galat URL type kare, ek custom 404 page dikhayenge.
+
+Design: Branded design, "Page Not Found" message, aur "Go to Home" button.
+
+Routing: React Router mein ek catch-all route (*) define karke ye page render karenge.
+
+Feature: Google & GitHub OAuth Signup
+Goal: Existing email/password auth ke saath Google OAuth aur GitHub OAuth bhi add karenge — user ek click mein signup/login kar sake.
+
+Implementation: Passport.js (Google Strategy + GitHub Strategy) ya Firebase Auth use kar sakte hain backend mein.
+
+Data Handling: OAuth se mile user data (name, email, profile pic) ko MongoDB mein existing user schema ke saath merge karenge.
+
+Feature: Payment & Credits System (Unique Feature)
+Goal: Free users ko limited credits milenge (jaise 3 resume analysis/month free).
+
+Monetization: Extra credits ya premium plan ke liye Razorpay/Stripe integration karenge.
+
+Credit Consumption: Har AI feature (resume analysis, mock interview, ATS generation) credit consume karega — isse app monetizable + scalable dikhega.
+
+UI Display: Credits ka balance user dashboard pe dikhayenge.
+
+Feature: Charts & Progress Graphs (Unique Feature)
+Goal: User ka prep progress visually dikhayenge — Recharts/Chart.js use karke.
+
+Examples:
+
+Score trend over time: Line chart
+
+Skill gap by category: Bar / Radar chart
+
+Mock interviews taken: Count / Streak
+
+Impact: Isse app sirf ek analyzer nahi, ek tracking dashboard jaisa lagega — recruiters ke saamne demo karte time bahut acha impact banega.
+
+Feature: Mock Interview Simulator (Voice-based)
+Speech-to-Text: User apna interview answer mic se bolta hai. Browser ka Web Speech API use karke voice ko real-time text (transcript) mein convert karenge — koi extra backend tool nahi chahiye.
+
+Metrics Tracked: Recording ke time transcript + speaking duration track karenge.
+
+Filler Word Count: Transcript mein se filler words (umm, like, basically, you know) count karenge — simple JS logic se, AI ki zaroorat nahi.
+
+AI Evaluation: Final transcript ko Gemini AI ko bhejenge evaluation ke liye — content quality, structure (STAR method), clarity, confidence ke basis par score (1-10) + improvement suggestions milenge.
+
+UI Display: Transcript, filler word count, AI score, aur feedback.
+
+Scope Note: Audio tone/pitch-based confidence detection MVP mein skip — sirf text-based analysis rakhenge.
+
+Feature: Answer Scoring + Improvement Suggestion
+Prompting Strategy: User jo bhi answer de (typed ya voice-to-text), uske saath original question bhi Gemini ko bhejenge.
+
+AI Judge Criteria: Technical correctness, STAR structure, completeness, clarity.
+
+Structured Response: Response structured JSON format mein mangwayenge (score, strengths[], improvements[]) taaki frontend mein easily render ho sake.
+
+Database Storage: Har answer + score + feedback ko MongoDB mein save karenge (user ke against) — future progress tracker ke liye useful.
+
+Frontend UI: Score (progress bar/number) + strengths/improvements bullet points mein dikhayenge.
+
+Tech Stack Summary
+Voice-to-Text: Web Speech API
+
+Logic: Custom JavaScript (Filler word count)
+
+AI Engine: Gemini AI API (Scoring & Feedback)
+
+Database: MongoDB (Storage)
+
+Auth: Passport.js / Firebase (OAuth)
+
+Payments: Razorpay / Stripe
+
+Data Viz: Recharts / Chart.js

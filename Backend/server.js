@@ -9,6 +9,8 @@ const connectToDB = require('./config/database.js');
 
 connectToDB(); // here we have call the function to start the server
 
+
+
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 })

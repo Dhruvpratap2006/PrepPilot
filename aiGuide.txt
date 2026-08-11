@@ -1,0 +1,19 @@
+AI Feature Overview – PrepPilot
+
+User Side (Input)
+User teen cheezein provide karta hai:
+
+Self Description
+Resume [PDF]
+Job Description (targeting role ki)
+
+Backend Flow
+Ye teeno inputs hamare server (backend) ko bheje jaate hain. Backend in inputs ko AI ke paas process ke liye bhejta hai.
+
+AI Output (Report)
+AI in inputs ko analyze karke ek detailed Report generate karta hai jisme ye sections hote hain:
+
+technicalQuestions — targeted role ke hisaab se technical interview questions
+behavioralQuestions — HR/behavioral round ke questions
+skillGaps — user ke resume aur JD ke beech ka skill gap analysis
+preparationPlan — un gaps ko cover karne ke liye ek structured preparation plan
