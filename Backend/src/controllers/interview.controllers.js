@@ -1,5 +1,5 @@
-const { generateInterviewReport } = require('../services/ai.services');
-const pdfParse = require('pdf-parse');
+const { generateInterviewReport, generateResumePDF, generatePdfFromHtml } = require('../services/ai.services');
+
 const interviewReportModel = require('../models/interview.model');
 
 /**
@@ -98,4 +98,38 @@ async function getAllInterviewReportsController(req, res) {
     }
 }
 
-module.exports = { generateInterviewReportController, getInterviewReportByIdController, getAllInterviewReportsController };
+/**
+ * @description : generate a pdf of the interview report on the basis of ressume, self description and job description provided by the user
+ */
+
+async function generateResumePDFController(req, res) {
+    try {
+        const { interviewReportId } = req.params;
+
+        const interviewReport = await interviewReportModel.findById(interviewReportId);
+
+        if (!interviewReport) {
+            return res.status(404).json({ message: "Interview report not found" });
+        }
+
+        const { html } = await generateResumePDF({
+            resume: interviewReport.resume,
+            selfDescription: interviewReport.selfDescription,
+            jobDescription: interviewReport.jobDescription
+        });
+
+        const pdfBuffer = await generatePdfFromHtml(html);  // tumhara already-bana helper use kiya
+
+        res.set({
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment; filename=resume-${interviewReportId}.pdf`
+        });
+        res.send(pdfBuffer);
+
+    } catch (err) {
+        console.error("Error generating resume PDF:", err);
+        res.status(500).json({ message: "Failed to generate resume PDF" });
+    }
+}
+
+module.exports = { generateInterviewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePDFController };

@@ -3,6 +3,7 @@
 const { GoogleGenAI } = require("@google/genai")
 const { z } = require("zod")
 const { zodToJsonSchema } = require("zod-to-json-schema")
+const puppeteer = require("puppeteer")
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY
@@ -61,5 +62,90 @@ async function generateInterviewReport({resume, jobDescription, selfDescription}
     return JSON.parse(response.text)
 }
 
+async function generatePdfFromHtml(htmlContent) {
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage();
+    await page.setContent(htmlContent, { waitUntil: "networkidle0" })
 
-module.exports = { generateInterviewReport }
+    const pdfBuffer = await page.pdf({
+        format: "A4",
+        margin: { top: "12mm", bottom: "12mm", left: "12mm", right: "12mm" },
+        scale: 0.92
+    })
+
+    await browser.close()
+
+    return pdfBuffer
+}
+
+async function generateResumePDF({resume, selfDescription, jobDescription}) {
+
+  // now here we are also going to use zod for schema
+  const resumePdfSchema = z.object({
+     html: z.string().describe("The HTML content of the resume which can be converted to PDF using any library like puppeteer")
+  })
+
+  const prompt = `You are an expert resume writer and ATS optimization specialist with 10+ years of experience helping candidates land interviews at top companies.
+
+TASK: Rewrite and tailor the candidate's resume for a specific job description, output as clean HTML ready for PDF conversion.
+
+INPUT DATA:
+- Original Resume: ${resume}
+- Candidate's Self Description: ${selfDescription}
+- Target Job Description: ${jobDescription}
+
+INSTRUCTIONS:
+
+1. CONTENT STRATEGY
+   - Analyze the job description and identify the top 5-7 keywords/skills the ATS will scan for
+   - Naturally weave these keywords into the resume's existing bullet points and skills section — don't force them awkwardly
+   - Rewrite bullet points using strong action verbs (Built, Led, Optimized, Reduced, Increased) followed by quantifiable impact (%, numbers, time saved) wherever the original resume or self-description gives you data to work with
+   - Do NOT invent achievements, numbers, or experience that aren't grounded in the original resume or self-description
+   - Reorder or re-emphasize sections/bullets so the most job-relevant experience appears first
+   - STRICT CONSTRAINT: The resume must fit exactly 1 page when rendered as A4/Letter PDF. Prioritize the most relevant 3-4 bullet points per role/project over including everything — cut lower-impact or older experience/projects if needed to maintain 1-page length.
+
+2. WRITING STYLE (avoid AI-sounding text)
+   - No generic phrases like "results-driven professional," "team player," "dynamic individual," "passionate about"
+   - No em-dashes used as a stylistic tic; use them only when grammatically natural
+   - Vary sentence length and structure — real resumes aren't uniformly polished
+   - Write the way the candidate would describe their own work, based on their self-description's tone
+
+3. ATS COMPATIBILITY (non-negotiable)
+   - Use standard section headers: "Experience," "Education," "Skills," "Projects" — no creative renaming
+   - No tables, no multi-column layouts, no text inside images, no icons for critical info (icons purely decorative are OK)
+   - Use semantic HTML (<h1>, <h2>, <ul><li>, etc.) — not divs styled to look like headers
+   - Standard fonts only (Arial, Calibri, Georgia, Helvetica) — no decorative/script fonts
+   - Contact info as plain text, not in a header/footer or image
+
+4. VISUAL DESIGN
+   - Clean, single-column layout (ATS-safe), generous white space, consistent margins
+   - One accent color max (for name/section headers only) — professional tones only (navy, dark teal, charcoal), no bright/neon colors
+   - Consistent font sizing hierarchy: name > section headers > job titles > body text
+   - Print-friendly: assume this will be rendered via Puppeteer to A4/Letter PDF — no fixed pixel widths beyond page size, use @media print considerations
+
+5. OUTPUT FORMAT
+   Return ONLY a valid JSON object, no markdown code fences, no explanation text before or after:
+   {
+     "html": "<the complete HTML document as a string, including inline <style> tag>"
+   }
+
+   The HTML must be a complete, self-contained document (starting with <!DOCTYPE html>) with all CSS inlined in a <style> tag in the <head> — no external stylesheets, since Puppeteer will render this standalone.`;
+
+   const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: prompt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: zodToJsonSchema(resumePdfSchema),
+        }
+    })
+
+
+    const jsonContent = JSON.parse(response.text)
+    return jsonContent 
+}
+
+  
+
+
+module.exports = { generateInterviewReport, generateResumePDF, generatePdfFromHtml } 

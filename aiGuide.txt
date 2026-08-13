@@ -17,3 +17,12 @@ technicalQuestions — targeted role ke hisaab se technical interview questions
 behavioralQuestions — HR/behavioral round ke questions
 skillGaps — user ke resume aur JD ke beech ka skill gap analysis
 preparationPlan — un gaps ko cover karne ke liye ek structured preparation plan
+
+
+Pupeter Package 
+Baasically this package we are going to use for generating the PDF report.
+Means if user wants to downolad the resume based on the report and it is 
+targetting that role and that resume will be ATS friendly.
+
+So we are going to ask the AI to generate the resume in HTML format
+and then we will use Puppeteer to convert that HTML into a PDF file which the user can download.
