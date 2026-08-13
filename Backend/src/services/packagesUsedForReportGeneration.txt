@@ -1,0 +1,63 @@
+-------------------------------Packages which were used for generating a AI report-----------------------------------
+
+
+Packages used in the AI part of this project
+
+1. @google/genai
+
+Purpose: This is Google's official SDK for talking to the Gemini AI model (gemini-3.6-flash in this case).
+
+GoogleGenAI creates a client instance using your API key
+ai.models.generateContent() sends the actual request to Gemini and returns the response
+In short: this is the connection layer between your app and Gemini.
+
+
+2. zod
+
+Purpose: A schema definition and validation library — you use it to describe the exact shape and type of data you expect.
+
+z.object({...}) defines all the fields the report should contain (title, matchScore, technicalQuestions, etc.) 
+along with their types (string, number, array, etc.)
+.describe() adds a short explanation to each field, which helps guide the AI on what to put there
+In short: this defines the structure/template that the AI's output must follow.
+
+
+3. zod-to-json-schema
+
+Purpose: Gemini's API doesn't understand Zod schemas directly — it expects a standard JSON Schema format. 
+This package converts a Zod schema into that format.
+
+In short: this is the translator that converts your Zod blueprint into a format Gemini can understand.
+
+4. Multer 
+
+Bascially it is an npm package which helps us to read the multipart/form-data in Express.
+As Exprees can't understand the PDF or dock data which was send by the user. So for this use a Multer middleware
+which allows express to read this multipart/form-data 
+
+Extracts the uploaded file from the incoming request 
+and makes it available via req.file (single file) or req.files (multiple files).
+
+In short: this is what allows the server to receive the uploaded resume file before any processing happens
+
+
+5. pdf-parse
+
+Now that file which has come from MULTER is PDF buffer/file which is a raw Binary Data.
+But Gemini needs the text then only gemini can gave a good response;
+
+In short: this converts the uploaded PDF into plain text so it can be used inside the AI prompt
+
+
+
+User uploads PDF resume
+        ↓
+Multer receives the file (req.file / buffer)
+        ↓
+pdf-parse extracts text from that buffer
+        ↓
+Extracted text becomes the "resume" variable
+        ↓
+This text is sent inside the prompt to Gemini
+
+

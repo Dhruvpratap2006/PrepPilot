@@ -1,0 +1,14 @@
+[33m[nodemon] 3.1.14[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
+[32m[nodemon] starting `node server.js`[39m
+◇ injected env (3) from .env // tip: ⌘ override existing { override: true }
+Server is running on port 3000
+connected to DB
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
+[32m[nodemon] restarting child process[39m
+[32m[nodemon] starting `node server.js`[39m
+◇ injected env (3) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+Server is running on port 3000
+connected to DB

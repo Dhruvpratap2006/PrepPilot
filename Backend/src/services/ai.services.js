@@ -37,6 +37,7 @@ const generateInterviewReportSchema = z.object({
     focus: z.string().describe("Main topic for this day"),
     tasks: z.array(z.string()).describe("Actionable tasks for this day"),
   })),
+  title: z.string().describe("The title of the job for which the interview report is generated"),
 });
 
 async function generateInterviewReport({resume, jobDescription, selfDescription}) {

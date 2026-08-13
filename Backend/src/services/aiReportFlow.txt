@@ -1,0 +1,70 @@
+┌─────────────────────────────────────────────────────────────────┐
+│                 generateInterviewReport() FLOW                   │
+└─────────────────────────────────────────────────────────────────┘
+
+  INPUT
+  ┌───────────────────────────────────────┐
+  │ resume + jobDescription +              │
+  │ selfDescription  (from caller)         │
+  └───────────────────┬───────────────────┘
+                       │
+                       ▼
+  STEP 1: Build Prompt
+  ┌───────────────────────────────────────┐
+  │ prompt = `Generate an interview report │
+  │  for a candidate with: Resume, Self    │
+  │  Description, Job Description`         │
+  └───────────────────┬───────────────────┘
+                       │
+                       ▼
+  STEP 2: Attach Schema (zod → JSON schema)
+  ┌───────────────────────────────────────┐
+  │ generateInterviewReportSchema defines: │
+  │  - title                               │
+  │  - matchScore (0-100)                  │
+  │  - technicalQuestions[]                │
+  │  - behavioralQuestions[]               │
+  │  - skillGaps[]                         │
+  │  - preparationPlan[]                   │
+  └───────────────────┬───────────────────┘
+                       │
+                       ▼
+  STEP 3: Call Gemini API
+  ┌───────────────────────────────────────┐
+  │ ai.models.generateContent({            │
+  │   model: "gemini-3.6-flash",           │
+  │   contents: prompt,                    │
+  │   config: {                            │
+  │     responseMimeType: "application/json"│
+  │     responseSchema: <schema>           │
+  │   }                                    │
+  │ })                                     │
+  └───────────────────┬───────────────────┘
+                       │
+                       ▼
+  STEP 4: Gemini processes
+  ┌───────────────────────────────────────┐
+  │ Reads resume vs JD → calculates match  │
+  │ Generates tech + behavioral questions  │
+  │ Finds skill gaps → builds prep plan    │
+  │ Returns strict JSON (matches schema)   │
+  └───────────────────┬───────────────────┘
+                       │
+                       ▼
+  STEP 5: Parse Response
+  ┌───────────────────────────────────────┐
+  │ response.text  →  JSON string          │
+  │ JSON.parse(response.text)              │
+  │ →  usable JS object                    │
+  └───────────────────┬───────────────────┘
+                       │
+                       ▼
+  OUTPUT
+  ┌───────────────────────────────────────┐
+  │ { title, matchScore,                   │
+  │   technicalQuestions, behavioralQuestions,│
+  │   skillGaps, preparationPlan }         │
+  │ → returned to caller (e.g. controller  │
+  │   which saves to MongoDB)              │
+  └─────────────────────────────────────────┘
+

@@ -1,3 +1,7 @@
+fix loading Passport
+
+add a navbar and footer take preference from roamio
+
 Feature: Home Page
 Goal: Landing page banayenge jo PrepPilot ke core value ko highlight kare.
 
