@@ -1,5 +1,5 @@
 const { generateInterviewReport, generateResumePDF, generatePdfFromHtml } = require('../services/ai.services');
-
+const pdfParse = require('pdf-parse');
 const interviewReportModel = require('../models/interview.model');
 
 /**

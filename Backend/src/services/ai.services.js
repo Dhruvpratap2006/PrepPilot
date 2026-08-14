@@ -87,7 +87,7 @@ async function generateResumePDF({resume, selfDescription, jobDescription}) {
 
   const prompt = `You are an expert resume writer and ATS optimization specialist with 10+ years of experience helping candidates land interviews at top companies.
 
-TASK: Rewrite and tailor the candidate's resume for a specific job description, output as clean HTML ready for PDF conversion.
+TASK: Rewrite and tailor the candidate's resume for a specific job description, outputting a complete, self-contained HTML document ready for Puppeteer/PDF conversion.
 
 INPUT DATA:
 - Original Resume: ${resume}
@@ -96,41 +96,103 @@ INPUT DATA:
 
 INSTRUCTIONS:
 
-1. CONTENT STRATEGY
-   - Analyze the job description and identify the top 5-7 keywords/skills the ATS will scan for
-   - Naturally weave these keywords into the resume's existing bullet points and skills section — don't force them awkwardly
-   - Rewrite bullet points using strong action verbs (Built, Led, Optimized, Reduced, Increased) followed by quantifiable impact (%, numbers, time saved) wherever the original resume or self-description gives you data to work with
-   - Do NOT invent achievements, numbers, or experience that aren't grounded in the original resume or self-description
-   - Reorder or re-emphasize sections/bullets so the most job-relevant experience appears first
-   - STRICT CONSTRAINT: The resume must fit exactly 1 page when rendered as A4/Letter PDF. Prioritize the most relevant 3-4 bullet points per role/project over including everything — cut lower-impact or older experience/projects if needed to maintain 1-page length.
+1. CONTENT STRATEGY & VARIABLE DYNAMIC MAPPING
+   - EXTRACT & RENDER NAME: Extract the candidate's actual full name from the Original Resume or Self Description and render it inside the <h1> header. NEVER output the text "Candidate Name" or place HTML comments.
+   - DO NOT INCLUDE ANY CONTACT INFORMATION (no email, phone, links, or location).
+   - COMPACT VERTICAL SPACING: Maintain tight, balanced spacing throughout. Do NOT leave extra white space or large gaps below headers or between sections.
+   - Analyze the target job description to identify 5-7 key ATS keywords and naturally integrate them into the bullet points.
+   - Use strong action verbs (Built, Architected, Optimized, Shipped, Engineered) followed by quantifiable metrics/impact wherever data is available.
+   - STRICT CONSTRAINT: The rendered output must fit EXACTLY on 1 single page (A4/Letter). Prioritize top 3-4 high-impact bullets per entry.
 
-2. WRITING STYLE (avoid AI-sounding text)
-   - No generic phrases like "results-driven professional," "team player," "dynamic individual," "passionate about"
-   - No em-dashes used as a stylistic tic; use them only when grammatically natural
-   - Vary sentence length and structure — real resumes aren't uniformly polished
-   - Write the way the candidate would describe their own work, based on their self-description's tone
+2. WRITING STYLE
+   - Avoid generic AI buzzwords ("results-driven professional", "dynamic individual", "team player").
+   - Write clear, technical, concise bullet points in standard developer resume tone.
 
-3. ATS COMPATIBILITY (non-negotiable)
-   - Use standard section headers: "Experience," "Education," "Skills," "Projects" — no creative renaming
-   - No tables, no multi-column layouts, no text inside images, no icons for critical info (icons purely decorative are OK)
-   - Use semantic HTML (<h1>, <h2>, <ul><li>, etc.) — not divs styled to look like headers
-   - Standard fonts only (Arial, Calibri, Georgia, Helvetica) — no decorative/script fonts
-   - Contact info as plain text, not in a header/footer or image
+3. REQUIRED HTML & CSS LAYOUT SPECIFICATIONS
+   Generate a complete, self-contained HTML document matching this EXACT structure and CSS style:
 
-4. VISUAL DESIGN
-   - Clean, single-column layout (ATS-safe), generous white space, consistent margins
-   - One accent color max (for name/section headers only) — professional tones only (navy, dark teal, charcoal), no bright/neon colors
-   - Consistent font sizing hierarchy: name > section headers > job titles > body text
-   - Print-friendly: assume this will be rendered via Puppeteer to A4/Letter PDF — no fixed pixel widths beyond page size, use @media print considerations
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: letter;
+    margin: 0;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9.5pt;
+    line-height: 1.3;
+    color: #111111;
+    margin: 0;
+    padding: 0.35in 0.4in;
+  }
+  h1 {
+    font-size: 18pt;
+    text-align: center;
+    margin: 0 0 6px 0;
+    font-weight: bold;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+  }
+  h2 {
+    font-size: 10.5pt;
+    text-transform: uppercase;
+    border-bottom: 1px solid #111111;
+    padding-bottom: 1px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 9.5pt;
+    margin-top: 4px;
+  }
+  .tech-stack {
+    font-style: italic;
+    font-size: 9pt;
+    color: #333333;
+    margin-top: 1px;
+    margin-bottom: 2px;
+  }
+  ul {
+    margin-top: 2px;
+    margin-bottom: 4px;
+    padding-left: 18px;
+  }
+  li {
+    margin-bottom: 2px;
+    line-height: 1.3;
+  }
+  .skills-group {
+    margin-bottom: 2px;
+  }
+  .skills-group strong {
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+  <!-- Insert actual Candidate Name in <h1> -->
+  <!-- Section: Education -->
+  <!-- Section: Experience & Projects -->
+  <!-- Section: Technical Skills -->
+  <!-- Section: Achievements & Certifications -->
+</body>
+</html>
 
-5. OUTPUT FORMAT
-   Return ONLY a valid JSON object, no markdown code fences, no explanation text before or after:
+4. OUTPUT FORMAT
+   Return ONLY a valid JSON object containing no markdown wrappers, conversational text, or code blocks:
    {
-     "html": "<the complete HTML document as a string, including inline <style> tag>"
-   }
-
-   The HTML must be a complete, self-contained document (starting with <!DOCTYPE html>) with all CSS inlined in a <style> tag in the <head> — no external stylesheets, since Puppeteer will render this standalone.`;
-
+     "html": "<!DOCTYPE html><html>... fully rendered HTML string with actual candidate details ...</html>"
+   }`;
    const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: prompt,
