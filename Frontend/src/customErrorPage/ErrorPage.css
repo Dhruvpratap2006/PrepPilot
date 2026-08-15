@@ -1,0 +1,99 @@
+/* Page Background & Viewport Container */
+.error-page {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background-color: #050a0e;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(14, 116, 144, 0.22) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.18) 0px, transparent 50%);
+  background-attachment: fixed;
+  background-size: cover;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #f8fafc;
+}
+
+/* Centered Glassmorphic Card */
+.error-card {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(13, 22, 33, 0.75);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Subtle Badge */
+.error-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: #38bdf8;
+  margin-bottom: 1.25rem;
+}
+
+/* Glowing 404 Text */
+.error-card h1 {
+  font-size: clamp(4rem, 10vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin: 0 0 1rem 0;
+  background: linear-gradient(135deg, #ffffff 0%, #38bdf8 60%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.35));
+}
+
+/* Description Text */
+.error-card p {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  line-height: 1.55;
+  margin: 0 0 2rem 0;
+  max-width: 360px;
+}
+
+/* Action Button */
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.95rem 2rem;
+  background-color: #b2f5ea;
+  color: #0b1d28;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 30px;
+  box-shadow: 0 0 25px rgba(178, 245, 234, 0.3);
+  transition: all 0.2s ease;
+}
+
+.home-btn:hover {
+  background-color: #81e6d9;
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(178, 245, 234, 0.45);
+}
+
+.home-btn:active {
+  transform: translateY(0);
+}

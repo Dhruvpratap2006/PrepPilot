@@ -1,4 +1,4 @@
-fix loading Passport
+fix loading,  Passport
 
 add a navbar and footer take preference from roamio
 
@@ -91,3 +91,11 @@ Auth: Passport.js / Firebase (OAuth)
 Payments: Razorpay / Stripe
 
 Data Viz: Recharts / Chart.js
+
+
+
+Proper error handling across the whole project
+Full documentation for each flow (plain English)
+Full frontend-to-backend architecture diagram
+Google
+Quantity selector — let user choose kitne AI-generated interview questions chahiye

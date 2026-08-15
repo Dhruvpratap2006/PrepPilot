@@ -17,6 +17,10 @@ export const Register = () => {
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
 
+    const handleGoogleLogin = () => {
+  // Direct browser redirect to backend OAuth endpoint
+        window.location.href = "http://localhost:3000/api/auth/google";
+    }; 
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle register logic
@@ -119,14 +123,11 @@ export const Register = () => {
 
                         {/* Social Registration */}
                         <div className="social-auth-buttons">
-                            <button type="button" className="btn-social google">
+                            <button onClick={handleGoogleLogin} type="button" className="btn-social google">
                                 <FcGoogle size={18} />
                                 <span>Sign up with Google</span>
                             </button>
-                            <button type="button" className="btn-social github">
-                                <FaGithub size={18} />
-                                <span>Sign up with GitHub</span>
-                            </button>
+                            
                         </div>
 
                     </div>

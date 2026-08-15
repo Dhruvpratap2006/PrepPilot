@@ -453,3 +453,93 @@ html, body {
     }
   }
 }
+
+/* ===============================
+   Selected PDF UI Card
+================================== */
+.selected-pdf-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #090e15;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .pdf-badge {
+    width: 38px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    gap: 1px;
+
+    &__icon {
+      color: #f87171;
+    }
+
+    span {
+      font-size: 8px;
+      font-weight: 800;
+      color: #f87171;
+      letter-spacing: 0.5px;
+      line-height: 1;
+    }
+  }
+
+  .pdf-meta {
+    min-width: 0;
+
+    &__name {
+      color: #f1f5f9;
+      font-size: 13.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 210px;
+    }
+
+    &__sub {
+      color: #94a3b8;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+  }
+
+  &__remove {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #f87171;
+      background: rgba(248, 113, 113, 0.12);
+    }
+  }
+}

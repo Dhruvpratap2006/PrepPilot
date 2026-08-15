@@ -454,3 +454,135 @@ body {
     transform: rotate(360deg);
   }
 }
+
+
+// ── Top Sidebar Grid Container ──
+.interview-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+
+  @media (max-width: 580px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sidebar-card {
+  background: rgba(14, 25, 37, 0.7);
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  border-radius: 20px;
+  padding: 1.5rem 1.25rem;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  p.match-score__label,
+  p.skill-gaps__label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 1rem;
+  }
+}
+
+// ── Match Score Card & Equalizer Spectrum ──
+.match-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  &__value {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: #f8fafc;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  &__pct {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #38bdf8;
+  }
+
+  // Equalizer Container
+  .equalizer-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    height: 48px;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  // Inactive Bars (Default Off State)
+  .equalizer-bar {
+    flex: 1;
+    max-width: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    // Active Glowing State
+    &--active {
+      background: linear-gradient(to top, #0284c7, #38bdf8);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+    }
+  }
+
+  &__sub {
+    font-size: 0.78rem;
+    color: #64748b;
+  }
+}
+
+// ── Top Skill Gaps Card ──
+.skill-gaps {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .skill-tag {
+    background: rgba(56, 189, 248, 0.06);
+    border: 1px solid rgba(56, 189, 248, 0.12);
+    border-radius: 12px;
+    padding: 0.75rem 0.9rem;
+    font-size: 0.82rem;
+    line-height: 1.35;
+    color: #f1f5f9;
+
+    &--high {
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.2);
+      background: rgba(239, 68, 68, 0.08);
+    }
+
+    &--mid {
+      color: #fde047;
+      border-color: rgba(234, 179, 8, 0.2);
+      background: rgba(234, 179, 8, 0.08);
+    }
+
+    &--low {
+      color: #86efac;
+      border-color: rgba(34, 197, 94, 0.2);
+      background: rgba(34, 197, 94, 0.08);
+    }
+  }
+}

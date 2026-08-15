@@ -85,35 +85,46 @@ const Interview = () => {
             <div className='interview-layout'>
 
                 {/* ── Top Section: Match Score & Skill Gaps ── */}
-                <aside className='interview-sidebar'>
+               <aside className='interview-sidebar'>
                     <div className='sidebar-card match-score'>
                         <p className='match-score__label'>Match Score</p>
                         
-                        {/* Dynamic Conic Gradient Ring */}
-                        <div 
-                          className={`match-score__ring ${scoreColor}`}
-                          style={{ '--score-pct': `${report.matchScore}%` }}
-                        >
-                            <div className='match-score__inner'>
-                              <span className='match-score__value'>{report.matchScore}</span>
-                              <span className='match-score__pct'>%</span>
-                            </div>
+                        {/* Large Percentage Header */}
+                        <div className='match-score__header'>
+                            <span className='match-score__value'>{report.matchScore}</span>
+                            <span className='match-score__pct'>%</span>
                         </div>
-                        
-                        <p className='match-score__sub'>Strong match for this role</p>
-                    </div>
 
-                    <div className='sidebar-card skill-gaps'>
-                        <p className='skill-gaps__label'>Top Skill Gaps</p>
-                        <div className='skill-gaps__list'>
-                            {report.skillGaps.map((gap, i) => (
-                                <span key={i} className={`skill-tag skill-tag--${gap.severity}`}>
-                                    {gap.skill}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                </aside>
+                        {/* Equalizer Spectrum Bars (10 Segments) */}
+                        <div className='equalizer-bars'>
+                            {Array.from({ length: 10 }).map((_, index) => {
+                                const activeThreshold = (index + 1) * 10;
+                                const isActive = report.matchScore >= activeThreshold;
+                                return (
+                                    <div 
+                                        key={index} 
+                                        className={`equalizer-bar ${isActive ? 'equalizer-bar--active' : ''}`}
+                                        style={{ height: `${35 + (index % 4) * 15}%` }}
+                                    />
+                                );
+                            })}
+                </div>
+
+                <p className='match-score__sub'>Strong match for this role</p>
+            </div>
+
+            {/* Skill Gaps Card remains untouched below */}
+            <div className='sidebar-card skill-gaps'>
+                <p className='skill-gaps__label'>Top Skill Gaps</p>
+                <div className='skill-gaps__list'>
+                    {report.skillGaps.map((gap, i) => (
+                        <span key={i} className={`skill-tag skill-tag--${gap.severity}`}>
+                            {gap.skill}
+                        </span>
+                    ))}
+                </div>
+            </div>
+        </aside>
 
                 {/* ── Navigation Tabs ── */}
                 <nav className='interview-nav'>

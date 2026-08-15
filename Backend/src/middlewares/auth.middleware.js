@@ -11,9 +11,9 @@ async function authMiddleware(req, res, next) {
     const token = req.cookies.token;
 
     // if token is not present then send the status unautrhorized excess
-    if(!token) {
+    if (!token) {
         return res.status(401).json({
-            message : "Token not provided.Unauthorized access, please login first"
+            message: "Token not provided.Unauthorized access, please login first"
         })
     }
 
@@ -22,9 +22,9 @@ async function authMiddleware(req, res, next) {
         token // find on the basis of token
     })
 
-    if(isBlackListToken) {
+    if (isBlackListToken) {
         return res.status(401).json({
-            message : "Invalid token.."
+            message: "Invalid token.."
         })
     }
 
@@ -35,12 +35,12 @@ async function authMiddleware(req, res, next) {
         // if token is valid then attach the user info to the request object
         req.user = decodedToken;
         next();
-    } catch(err) {
+    } catch (err) {
         return res.status(401).json({
-            message : "Invalid token"
+            message: "Invalid token"
         })
     }
-    
+
 }
 
 module.exports = { authMiddleware };

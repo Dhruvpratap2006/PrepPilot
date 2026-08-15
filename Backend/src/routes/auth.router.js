@@ -7,7 +7,8 @@
 // all other releate apis in one group like this
 
 const { Router } = require('express');
-const authController = require('../controllers/auth.controllers');   
+const passport = require('passport');
+const authController = require('../controllers/auth.controllers');
 const { authMiddleware } = require('../middlewares/auth.middleware');
 
 const authRouter = Router();
@@ -43,6 +44,32 @@ authRouter.get("/logout", authController.logoutUserController);
 
 authRouter.get("/get-me", authMiddleware, authController.getMeController)
 
+// these all are google authentication routes which we are going to use for google authentication
 
+/**
+ * @route : GET => /api/auth/google
+ * @description: this route will take the user to google authentication page
+ * @access: public
+ */
+
+// here in passport.authenticate "google" means that we are using the google strategy 
+// which we make in passport.js and in scope we are saying that gave me the excess of user
+// profile and email and nothng else
+// session fale as we are saying to passport do not make any session as we are going to use the JWT
+authRouter.get("/google",
+    passport.authenticate("google", { scope: ["profile", "email"], session: false })
+)
+
+/**
+ * @route : GET => /api/auth/google/callback
+ * @description: this route will take the user to google authentication page and after that it will redirect to the callback url
+ * @access: public
+ */
+
+authRouter.get(
+    "/google/callback",
+    passport.authenticate("google", { session: false, failureRedirect: "/login" }),
+    authController.googleCallbackController
+);
 
 module.exports = authRouter;

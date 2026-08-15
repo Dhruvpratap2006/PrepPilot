@@ -1,26 +1,67 @@
-// this is the home page for the interview feature
-// here only user provide the job description, self description and the resume pdf
-
-import React, { useState, useRef } from 'react'
-import '../styles/home.scss'
+// src/features/interview/pages/Home.jsx
+import React, { useState, useRef } from 'react';
+import '../styles/home.scss';
 import { useInterview } from "../hooks/useInterview";
 import { useNavigate } from 'react-router';
-import { Briefcase, User, Paperclip, Upload, Info, ArrowRight } from 'lucide-react';
+import { useAuth } from '../../auth_features/hooks/useAuth';
+import { Briefcase, User, Paperclip, Upload, Info, ArrowRight, FileText, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Home = () => {
-
   const { loading, generateReport, reports } = useInterview();
-  const [jobDescription, setJobDescription] = useState("");
-  const [selfDescription, setSelfDescription] = useState("");
-  const resumeInputRef = useRef();
 
+  const [jobDescription, setJobDescription] = useState(
+    () => sessionStorage.getItem("jobDescription") || ""
+  );
+
+  const [selfDescription, setSelfDescription] = useState(
+    () => sessionStorage.getItem("selfDescription") || ""
+  );
+
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const resumeInputRef = useRef();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== "application/pdf") {
+      toast.error("Please upload a valid PDF file");
+      if (resumeInputRef.current) resumeInputRef.current.value = "";
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size must be under 5MB");
+      if (resumeInputRef.current) resumeInputRef.current.value = "";
+      return;
+    }
+
+    setSelectedFile(file);
+  };
+
+  const handleRemoveFile = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedFile(null);
+    if (resumeInputRef.current) {
+      resumeInputRef.current.value = "";
+    }
+  };
+
   const handleGenerateReport = async () => {
-    const resumeFile = resumeInputRef.current?.files[0];
+    if (!user) {
+      navigate('/login', { state: { from: '/' } });
+      return;
+    }
+
+    const resumeFile = selectedFile || resumeInputRef.current?.files?.[0];
 
     if (!jobDescription && !selfDescription && !resumeFile) {
-      alert("Please provide a job description, self description, or resume");
+      toast.error("Please provide a job description, self description, or resume");
       return;
     }
 
@@ -28,16 +69,19 @@ const Home = () => {
       const data = await generateReport({ jobDescription, selfDescription, resumeFile });
 
       if (!data || !data._id) {
-        alert("Failed to generate report. Please try again.");
+        toast.error("Failed to generate report. Please try again.");
         return;
       }
+
+      sessionStorage.removeItem("jobDescription");
+      sessionStorage.removeItem("selfDescription");
 
       navigate(`/interview/${data._id}`);
     } catch (error) {
       console.error("Error generating report:", error);
-      alert("Something went wrong while generating your report.");
+      toast.error("Something went wrong while generating your report.");
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -46,12 +90,11 @@ const Home = () => {
         <h1>Generating your interview report...</h1>
         <p className="loading-sub">This usually takes 10–20 seconds</p>
       </main>
-    )
+    );
   }
 
   return (
     <div className="home-page">
-
       {/* background glow */}
       <div className="bg-glow bg-glow--top"></div>
       <div className="bg-glow bg-glow--bottom"></div>
@@ -80,7 +123,11 @@ const Home = () => {
               <span className="badge badge--required">Required</span>
             </div>
             <textarea
-              onChange={(e) => (setJobDescription(e.target.value))}
+              value={jobDescription}
+              onChange={(e) => {
+                setJobDescription(e.target.value);
+                sessionStorage.setItem("jobDescription", e.target.value);
+              }}
               className="panel__textarea"
               name="jobDescription"
               id="jobDescription"
@@ -108,21 +155,54 @@ const Home = () => {
                 <span>Upload Resume (PDF)</span>
                 <span className="badge badge--best">Best</span>
               </div>
-              <label htmlFor="resume" className="dropzone">
-                <span className="dropzone__icon">
-                  <Upload size={22} />
-                </span>
-                <p className="dropzone__title">Click or drag PDF to upload</p>
-                <p className="dropzone__subtitle">Max size 5MB</p>
-              </label>
+
+              {/* Hidden file input */}
               <input
                 ref={resumeInputRef}
                 type="file"
                 name="resume"
                 id="resume"
                 accept=".pdf"
+                onChange={handleFileChange}
                 hidden
               />
+
+              {!selectedFile ? (
+                /* Default Dropzone */
+                <label htmlFor="resume" className="dropzone">
+                  <span className="dropzone__icon">
+                    <Upload size={22} />
+                  </span>
+                  <p className="dropzone__title">Click or drag PDF to upload</p>
+                  <p className="dropzone__subtitle">Max size 5MB</p>
+                </label>
+              ) : (
+                /* Uploaded File Selected Card */
+                <div className="selected-pdf-card">
+                  <div className="selected-pdf-card__left">
+                    <div className="pdf-badge">
+                      <FileText size={18} className="pdf-badge__icon" />
+                      <span>PDF</span>
+                    </div>
+                    <div className="pdf-meta">
+                      <p className="pdf-meta__name" title={selectedFile.name}>
+                        {selectedFile.name}
+                      </p>
+                      <p className="pdf-meta__sub">
+                        PDF • {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="selected-pdf-card__remove"
+                    onClick={handleRemoveFile}
+                    title="Remove file"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="or-divider">
@@ -134,7 +214,11 @@ const Home = () => {
                 <span>Self Description</span>
               </div>
               <textarea
-                onChange={(e) => (setSelfDescription(e.target.value))}
+                value={selfDescription}
+                onChange={(e) => {
+                  setSelfDescription(e.target.value);
+                  sessionStorage.setItem("selfDescription", e.target.value);
+                }}
                 className="panel__textarea panel__textarea--short"
                 name="selfDescription"
                 id="selfDescription"
@@ -156,7 +240,8 @@ const Home = () => {
           <span className="footer-info">Your data is used only to generate this report.</span>
           <button
             onClick={handleGenerateReport}
-            className="generate-btn">
+            className="generate-btn"
+          >
             <span>Generate Report</span>
             <ArrowRight size={18} />
           </button>
@@ -182,14 +267,8 @@ const Home = () => {
           </ul>
         </section>
       )}
-
-      <div className="page-footer">
-        <a href="/about">About</a>
-        <a href="/privacy">Privacy</a>
-      </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

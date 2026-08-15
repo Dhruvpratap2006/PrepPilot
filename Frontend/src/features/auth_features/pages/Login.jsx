@@ -1,5 +1,6 @@
 import "../auth.form.scss"
 import { useNavigate, Link } from "react-router"
+import { useLocation } from "react-router";
 import { useState } from "react"
 import { Grid2x2, Eye, EyeOff } from "lucide-react"
 import { FcGoogle } from "react-icons/fc"
@@ -9,6 +10,7 @@ import { useAuth } from "../hooks/useAuth"
 
 export const Login = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [showPassword, setShowPassword] = useState(false);
 
     const { loading , handleLogin} = useAuth();
@@ -16,13 +18,20 @@ export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const handleGoogleLogin = () => {
+    // Direct browser redirect to backend OAuth endpoint
+        window.location.href = "http://localhost:3000/api/auth/google";
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Handle login logic
         await handleLogin({ email, password })
         // as user gets succesfully login then we can navigete it to 
         // home page
-        navigate('/');
+        // navigate('/');
+        const redirectTo = location.state?.from || "/";
+        navigate(redirectTo);
     }
 
     if (loading) {
@@ -111,14 +120,11 @@ export const Login = () => {
 
                         {/* Social Login */}
                         <div className="social-auth-buttons">
-                            <button type="button" className="btn-social google">
+                            <button onClick={handleGoogleLogin} type="button" className="btn-social google">
                                 <FcGoogle size={18} />
                                 <span>Continue with Google</span>
                             </button>
-                            <button type="button" className="btn-social github">
-                                <FaGithub size={18} />
-                                <span>Continue with GitHub</span>
-                            </button>
+                            
                         </div>
 
                     </div>
