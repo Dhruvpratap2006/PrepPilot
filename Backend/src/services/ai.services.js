@@ -275,6 +275,58 @@ ${JSON.stringify(interviewData)}`;
 }
 
   
+// this function helps in generate the questions for mock interview part 
+async function generateMockInterviewQuestions( { role, domain, experienceLevel, techStack, jobDescription, numQuestions, category } ) {
 
+  // role -> ex : Software Engineer, Data Scientist, Product Manager
+  // domain -> ex : Web Development, Machine Learning, Cloud Computing
+  // experienceLevel -> ex : Junior, Mid-level, Senior
+  // techStack -> ex : React, Node.js, Python, TensorFlow
+  // jobDescription -> ex : The job description for the role
+  // numQuestions -> ex : 5, 10, 15
+  // category -> ex : Technical, Behavioral, System Design
 
-module.exports = { generateInterviewReport, generateResumePDF, generatePdfFromHtml, generateMockInterviewFeedback }
+      const mockInterviewQuestionsSchema = {
+        type: "object",
+        properties: {
+          questions: {
+            type: "array",
+            items: { type: "string" },
+          },
+        },
+        required: ["questions"],
+      };
+
+      const prompt = `You are an expert technical interviewer creating mock interview questions.
+
+          TASK: Generate exactly ${numQuestions} interview questions based on the details below.
+
+          CANDIDATE TARGET ROLE: ${role}
+          DOMAIN: ${domain}
+          EXPERIENCE LEVEL: ${experienceLevel} (calibrate question difficulty and depth accordingly — e.g., Fresher gets fundamentals-focused questions, Senior/Lead gets architecture, trade-off, and leadership-oriented questions)
+          TECH STACK: ${techStack || "Not specified — infer relevant technologies from the domain and role"}
+          ${jobDescription ? `JOB DESCRIPTION: ${jobDescription}\nUse this job description to extract the exact skills, tools, and responsibilities to base questions on.` : ""}
+          QUESTION CATEGORY: ${category} (Technical, Behavioral, or Mixed)
+
+          INSTRUCTIONS:
+          - If category is "Technical", generate only technical/conceptual or system-design questions relevant to the tech stack, domain, and experience level.
+          - If category is "Behavioral", generate only behavioral/situational questions (no tech stack references needed), calibrated to the experience level (e.g., Senior/Lead should get leadership and conflict-resolution scenarios, Fresher should get simpler situational questions).
+          - If category is "Mixed", generate a balanced split of technical and behavioral questions.
+          - Questions should be realistic, the kind an actual interviewer would ask for this specific role and experience level.
+          - Do not number the questions or add any prefix — return plain question text only.
+          - Return exactly ${numQuestions} questions, no more, no less.`;
+
+        const response = await ai.models.generateContent({
+          model: "gemini-3-flash-preview",
+          contents: prompt,
+          config: {
+            responseMimeType: "application/json",
+            responseSchema: mockInterviewQuestionsSchema,
+          }
+        })
+
+        const jsonContent = JSON.parse(response.text);
+        return jsonContent;
+}
+
+module.exports = { generateInterviewReport, generateResumePDF, generatePdfFromHtml, generateMockInterviewFeedback, generateMockInterviewQuestions }

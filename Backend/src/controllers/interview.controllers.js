@@ -1,4 +1,4 @@
-const { generateInterviewReport, generateResumePDF, generatePdfFromHtml, generateMockInterviewFeedback  } = require('../services/ai.services');
+const { generateInterviewReport, generateResumePDF, generatePdfFromHtml, generateMockInterviewFeedback, generateMockInterviewQuestions } = require('../services/ai.services');
 const pdfParse = require('pdf-parse');
 const interviewReportModel = require('../models/interview.model');
 const mockInterviewModel = require('../models/mockInterview.model');
@@ -166,4 +166,49 @@ async function submitMockInterviewController(req, res) {
     }
 }
 
-module.exports = { generateInterviewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePDFController, submitMockInterviewController };
+
+/**
+ * @description: this controller is used to gnerate the questions from an AI for mock intervie
+ */
+
+async function generateMockInterviewQuestionsController(req, res) {
+
+    try {
+
+        const { role, domain, experienceLevel, techStack, jobDescription, numQuestions, category } = req.body;
+
+        if(!role || !domain || !experienceLevel || !numQuestions || !category) {
+            return res.status(400).json({ message: "role, domain, experienceLevel, numQuestions, and category are required" });
+        }
+
+        const { questions } = await generateMockInterviewQuestions({
+            role,
+            domain,
+            experienceLevel,
+            techStack,
+            jobDescription,
+            numQuestions,
+            category
+        });
+
+        res.status(200).json({
+            message: "Mock interview questions generated successfully",
+            questions
+        });
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Something went wrong while generating mock interview questions",
+            error: err.message,
+        });
+    }
+}
+
+module.exports = { 
+    generateInterviewReportController, 
+    getInterviewReportByIdController, 
+    getAllInterviewReportsController, 
+    generateResumePDFController, 
+    submitMockInterviewController, 
+    generateMockInterviewQuestionsController 
+};

@@ -45,5 +45,11 @@ interviewRouter.post('/resume/pdf/:interviewReportId', authMiddleware, interview
  */
 interviewRouter.post("/submit-mock-interview", authMiddleware, interviewController.submitMockInterviewController);
 
+/**
+ * @route : POST /api/interview/generate-mock-questions
+ * @description : generate mock interview questions on the basis of the info provide by the user
+ * @access : private
+**/
+interviewRouter.post("/generate-mock-questions", authMiddleware, interviewController.generateMockInterviewQuestionsController);
 
 module.exports = interviewRouter;
