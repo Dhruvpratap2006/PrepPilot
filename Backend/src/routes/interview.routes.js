@@ -38,4 +38,12 @@ interviewRouter.get('/', authMiddleware, interviewController.getAllInterviewRepo
  */
 interviewRouter.post('/resume/pdf/:interviewReportId', authMiddleware, interviewController.generateResumePDFController);
 
+/**
+ * @route : POST /api/interview/submit-mock-interview
+ * @description : submit a mock interview and get feedback on the basis of the user answers and the job description provided by the user
+ * @access : private means once user is logged in then only he can access this route 
+ */
+interviewRouter.post("/submit-mock-interview", authMiddleware, interviewController.submitMockInterviewController);
+
+
 module.exports = interviewRouter;

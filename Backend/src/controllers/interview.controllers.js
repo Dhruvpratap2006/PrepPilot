@@ -1,7 +1,7 @@
-const { generateInterviewReport, generateResumePDF, generatePdfFromHtml } = require('../services/ai.services');
+const { generateInterviewReport, generateResumePDF, generatePdfFromHtml, generateMockInterviewFeedback  } = require('../services/ai.services');
 const pdfParse = require('pdf-parse');
 const interviewReportModel = require('../models/interview.model');
-
+const mockInterviewModel = require('../models/mockInterview.model');
 /**
  * @desc : generate a interview report on the basis of user self description and the job description provided by the user
  * @access : private means once user is logged in then only he can access this route 
@@ -106,7 +106,7 @@ async function generateResumePDFController(req, res) {
     try {
         const { interviewReportId } = req.params;
 
-        const interviewReport = await interviewReportModel.findById(interviewReportId);
+        const interviewReport = await interviewReportModel.findOne({ _id: interviewReportId, user: req.user.id });
 
         if (!interviewReport) {
             return res.status(404).json({ message: "Interview report not found" });
@@ -127,9 +127,43 @@ async function generateResumePDFController(req, res) {
         res.send(pdfBuffer);
 
     } catch (err) {
-        console.error("Error generating resume PDF:", err);
+        console.error("Error in generating resume PDF:", err);
         res.status(500).json({ message: "Failed to generate resume PDF" });
     }
 }
 
-module.exports = { generateInterviewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePDFController };
+/**
+ * @description : controller for submitting mock interview data to ai
+ */
+
+async function submitMockInterviewController(req, res) {
+
+   try {
+     const { interviewData } = req.body;
+
+    if (!interviewData || interviewData.length === 0) {
+        return res.status(400).json({message : "Interview data is required"})
+    }
+
+    const feedback = await generateMockInterviewFeedback(interviewData);
+
+    const savedInterview = await mockInterviewModel.create({
+        user : req.user.id,
+        interviewData,
+        feedback
+    });
+
+     res.status(201).json({
+            message: "Mock interview feedback generated successfully",
+            interview: savedInterview,
+        });
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Something went wrong while generating feedback",
+            error: err.message,
+        });
+    }
+}
+
+module.exports = { generateInterviewReportController, getInterviewReportByIdController, getAllInterviewReportsController, generateResumePDFController, submitMockInterviewController };
