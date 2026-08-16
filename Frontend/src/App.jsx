@@ -3,6 +3,7 @@ import { RouterProvider } from "react-router"
 import { router } from "./app.routes.jsx"
 import { AuthProvider } from "./features/auth_features/auth.context.jsx"
 import { InterviewerProvider } from "./features/interview/interview.context.jsx"
+import { MockInterviewProvider } from "./features/interview/mockInterview.context.jsx"
 
 
 function App() {
@@ -44,7 +45,9 @@ function App() {
           }}
         />
       <InterviewerProvider>
-        <RouterProvider router={router} />
+        <MockInterviewProvider>
+          <RouterProvider router={router} />
+        </MockInterviewProvider>
       </InterviewerProvider>
       
     </AuthProvider>

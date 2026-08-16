@@ -241,6 +241,38 @@ body {
       transform: translateX(-50%) scale(0.98);
     }
   }
+
+  .secondary-button {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 3rem);
+    max-width: 480px;
+    padding: 1.1rem;
+    background: #38bdf8;
+    color: #06131e;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    box-shadow: 0 4px 30px rgba(56, 189, 248, 0.4);
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #7dd3fc;
+    }
+
+    &:active {
+      transform: translateX(-50%) scale(0.98);
+    }
+  }
 }
 
 // ── Content Sections ──
@@ -586,3 +618,591 @@ body {
     }
   }
 }
+
+// Theme Variables Reference
+$accent-cyan: #38bdf8;
+$card-bg: rgba(14, 25, 37, 0.85);
+
+// ── 1. Top Bar Actions (Home & Mock Interview Buttons) ──
+.interview-top-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  width: 100%;
+
+  .top-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    border-radius: 12px;
+    background: $card-bg;
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    color: #cbd5e1;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(56, 189, 248, 0.1);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    // Glow variant for Mock Interview
+    &--glow {
+      border-color: rgba(56, 189, 248, 0.35);
+      color: $accent-cyan;
+
+      &:hover {
+        background: rgba(56, 189, 248, 0.18);
+        border-color: $accent-cyan;
+        box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+      }
+    }
+  }
+}
+
+// ── 2. Floating Bottom Action Button (Download Resume) ──
+
+
+
+// ── Theme Variables Matching Mock Interview ──
+$bg-primary: #03080e;
+$bg-radial-top: #081a29;
+$card-bg: rgba(7, 19, 30, 0.75);
+$card-border: rgba(56, 189, 248, 0.12);
+$accent-cyan: #38bdf8;
+$text-primary: #ffffff;
+$text-secondary: #94a3b8;
+$text-muted: #64748b;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: $bg-primary;
+  color: $text-primary;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+}
+
+// ── Main Page Layout (Atmospheric Radial Glow & Wide Grid) ──
+.interview-page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  padding: 2rem 2.5rem 8rem;
+  max-width: 1140px;
+  margin: 0 auto;
+
+  // Top Radial Ambient Glow
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 480px;
+    background: radial-gradient(ellipse 70% 350px at 50% 0%, rgba(14, 45, 68, 0.55) 0%, transparent 80%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // Soft bottom fade for floating button
+  &::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    background: linear-gradient(to top, $bg-primary 45%, transparent);
+    pointer-events: none;
+    z-index: 90;
+  }
+}
+
+// ── Top Header Actions (Home & Mock Interview Pills) ──
+.interview-top-actions {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.25rem;
+
+  .top-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 1.15rem;
+    border-radius: 9999px; // Full Pill shape matching image 2
+    background: rgba(10, 24, 38, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e2e8f0;
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    backdrop-filter: blur(12px);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    &--glow {
+      border-color: rgba(56, 189, 248, 0.3);
+      color: $accent-cyan;
+
+      &:hover {
+        background: rgba(56, 189, 248, 0.18);
+        border-color: $accent-cyan;
+        box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+      }
+    }
+  }
+}
+
+.interview-layout {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+// ── Top Split Stats Grid ──
+.interview-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 1.75rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sidebar-card {
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 20px;
+  padding: 1.75rem 1.75rem;
+  backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+
+  p.match-score__label,
+  p.skill-gaps__label {
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $text-secondary;
+    margin-bottom: 1.25rem;
+  }
+}
+
+// ── Match Score Card & Equalizer Spectrum ──
+.match-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+  }
+
+  &__value {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  &__pct {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: $accent-cyan;
+  }
+
+  .equalizer-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    max-width: 220px;
+    height: 52px;
+    margin-bottom: 1.25rem;
+  }
+
+  .equalizer-bar {
+    flex: 1;
+    max-width: 9px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &--active {
+      background: linear-gradient(to top, #0284c7, $accent-cyan);
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.65);
+    }
+  }
+
+  &__sub {
+    font-size: 0.85rem;
+    color: $text-muted;
+  }
+}
+
+// ── Skill Gaps ──
+.skill-gaps {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .skill-tag {
+    background: rgba(56, 189, 248, 0.04);
+    border: 1px solid rgba(56, 189, 248, 0.12);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #e2e8f0;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+      border-color: rgba(56, 189, 248, 0.28);
+    }
+
+    &--high {
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.2);
+      background: rgba(239, 68, 68, 0.06);
+    }
+
+    &--mid {
+      color: #fde047;
+      border-color: rgba(234, 179, 8, 0.2);
+      background: rgba(234, 179, 8, 0.06);
+    }
+
+    &--low {
+      color: #86efac;
+      border-color: rgba(34, 197, 94, 0.2);
+      background: rgba(34, 197, 94, 0.06);
+    }
+  }
+}
+
+// ── Navigation Tabs ──
+.interview-nav {
+  display: flex;
+  justify-content: center;
+
+  .nav-content {
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 3.5rem;
+    width: 100%;
+  }
+
+  &__item {
+    background: transparent;
+    border: none;
+    padding: 1rem 1.25rem;
+    color: $text-secondary;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #f1f5f9;
+    }
+
+    &--active {
+      color: #ffffff;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2.5px;
+        background-color: #ffffff;
+        border-radius: 2px;
+      }
+    }
+  }
+}
+
+// ── Content Sections & Question Cards ──
+.interview-content {
+  padding-bottom: 2rem;
+
+  .content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: $text-primary;
+    }
+
+    &__count {
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.4rem 0.85rem;
+      border-radius: 20px;
+      color: $text-secondary;
+    }
+  }
+}
+
+.q-list, .roadmap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.q-card {
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: rgba(56, 189, 248, 0.25);
+  }
+
+  &__header {
+    padding: 1.4rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.15rem;
+    cursor: pointer;
+  }
+
+  &__index {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    color: $accent-cyan;
+    font-size: 0.88rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__question {
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #f1f5f9;
+    flex: 1;
+  }
+
+  &__chevron {
+    color: $text-secondary;
+    transition: transform 0.2s ease;
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__body {
+    padding: 0 1.5rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 0.75rem;
+  }
+
+  &__section p {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-top: 0.6rem;
+  }
+
+  &__tag {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+
+    &--intention {
+      background: rgba(234, 179, 8, 0.12);
+      color: #facc15;
+    }
+
+    &--answer {
+      background: rgba(34, 197, 94, 0.12);
+      color: #4ade80;
+    }
+  }
+}
+
+// ── Roadmap Cards ──
+.roadmap-day {
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 20px;
+  padding: 1.5rem 1.75rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  &__badge {
+    background: rgba(56, 189, 248, 0.15);
+    color: $accent-cyan;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.35rem 0.85rem;
+    border-radius: 8px;
+  }
+
+  &__focus {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  &__tasks {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    li {
+      font-size: 0.94rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+  }
+
+  &__bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: $accent-cyan;
+    flex-shrink: 0;
+  }
+}
+
+// ── Floating Action Button (Download Resume) ──
+
+.primary-floating-btn {
+  position: sticky;
+  bottom: 2.25rem;
+  margin: 2rem auto 0;
+  width: calc(100% - 3rem);
+  max-width: 480px;
+  padding: 1.15rem;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  font-size: 1.02rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.5);
+  cursor: pointer;
+  z-index: 100;
+
+  &:hover {
+    background: #1d4ed8;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// ── Floating Action Button (.button.primary-button) ──
+.button.primary-button {
+  position: fixed;
+  bottom: 2.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 3rem);
+  max-width: 440px;
+  padding: 1rem 1.75rem;
+  background: #38bdf8;
+  color: #03080e;
+  border: none;
+  border-radius: 9999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 28px rgba(56, 189, 248, 0.45);
+  cursor: pointer;
+  z-index: 100;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: #7dd3fc;
+    box-shadow: 0 6px 36px rgba(56, 189, 248, 0.6);
+    transform: translateX(-50%) translateY(-2px);
+  }
+
+  &:active {
+    transform: translateX(-50%) scale(0.97);
+  }
+} 

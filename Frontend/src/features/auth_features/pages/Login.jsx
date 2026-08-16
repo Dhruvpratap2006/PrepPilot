@@ -7,6 +7,7 @@ import { FcGoogle } from "react-icons/fc"
 import { FaGithub } from "react-icons/fa"
 import loginImage from "../../../assets/images/authImages/LOGIN.png"
 import { useAuth } from "../hooks/useAuth"
+import LoadingBar from "../../interview/components/LoadingBar";
 
 export const Login = () => {
     const navigate = useNavigate();
@@ -34,20 +35,11 @@ export const Login = () => {
         navigate(redirectTo);
     }
 
-    if (loading) {
-    return (
-        <div className="loading-screen">
-            <div className="loading-content">
-                <Grid2x2 className="loading-brand-icon" size={32} />
-                <div className="loader"></div>
-                <p>Logging in...</p>
-            </div>
-        </div>
-    )
-}
+    
 
     return (
         <main className="auth-page">
+            {loading && <LoadingBar label="Logging you in" />}
             <div className="auth-card">
 
                 {/* Left side - visual + tagline */}

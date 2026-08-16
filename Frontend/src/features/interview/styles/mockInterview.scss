@@ -1,0 +1,650 @@
+    @import "./home.scss";
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  label {
+    font-size: 0.8rem;
+    color: $text-secondary;
+    font-weight: 600;
+  }
+
+  input,
+  select {
+    width: 100%;
+    background: $input-bg;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    color: $text-primary;
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      border-color: $card-border-focus;
+    }
+  }
+
+  select {
+    cursor: pointer;
+  }
+}
+
+.form-error {
+  color: #f87171;
+  font-size: 0.85rem;
+  text-align: center;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+}
+
+.info-box__icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.session-card {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 20px;
+  padding: 2.5rem;
+  backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    transition: all 0.2s ease;
+
+    &.done {
+      background: $accent-cyan;
+    }
+
+    &.active {
+      width: 22px;
+      border-radius: 4px;
+      background: $accent-cyan;
+    }
+  }
+}
+
+.question-box {
+  text-align: center;
+  padding: 1rem 0.5rem;
+
+  p {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $text-primary;
+    line-height: 1.5;
+  }
+}
+
+.transcript-box {
+  min-height: 90px;
+  background: $input-bg;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.1rem 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  p {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  &__live {
+    color: $text-primary;
+  }
+
+  &__saved {
+    color: $text-secondary;
+  }
+
+  &__placeholder {
+    color: $text-muted;
+    font-style: italic;
+  }
+}
+
+.mic-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+
+  &__label {
+    font-size: 0.82rem;
+    color: $text-secondary;
+  }
+}
+
+.mic-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: $accent-cyan;
+  color: $step-text;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(178, 245, 234, 0.35);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &--recording {
+    background: #f87171;
+    box-shadow: 0 0 0 8px rgba(248, 113, 113, 0.15);
+    animation: pulse 1.4s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.4); }
+  70% { box-shadow: 0 0 0 14px rgba(248, 113, 113, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0); }
+}
+
+.session-footer {
+  display: flex;
+  justify-content: center;
+}
+
+// Hero score section — circular ring + summary
+.result-hero {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 20px;
+  padding: 2.5rem;
+  backdrop-filter: blur(16px);
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+}
+
+.score-ring {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  circle {
+    transition: stroke-dashoffset 0.6s ease;
+  }
+
+  &__text {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: $text-primary;
+    line-height: 1;
+  }
+
+  &__max {
+    font-size: 0.85rem;
+    color: $text-muted;
+  }
+}
+
+.result-hero__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  p {
+    font-size: 0.95rem;
+    color: $text-secondary;
+    line-height: 1.6;
+  }
+}
+
+// Section wrapper — used for both question breakdown and action plan
+.result-section {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.85rem;
+    color: $text-secondary;
+  }
+}
+
+.question-feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.question-feedback-card {
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  &__question {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $text-primary;
+    line-height: 1.4;
+  }
+
+  &__q-num {
+    display: inline-block;
+    color: $accent-cyan;
+    font-weight: 700;
+    margin-right: 0.5rem;
+  }
+
+  &__score {
+    font-size: 0.95rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  &__feedback {
+    font-size: 0.88rem;
+    color: $text-secondary;
+    line-height: 1.6;
+  }
+}
+
+.score-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+
+  &__fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.6s ease;
+  }
+}
+
+.action-plan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.action-plan-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+
+  &__icon {
+    color: $accent-cyan;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $text-secondary;
+    line-height: 1.5;
+  }
+}
+
+.result-footer {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 1rem;
+}
+
+.action-plan-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+
+  &__icon {
+    color: $accent-cyan;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  p {
+    font-size: 0.92rem;
+    font-weight: 600;        // ⬅ bold kiya
+    color: $text-primary;    // ⬅ dim secondary color ki jagah bright primary
+    line-height: 1.5;
+  }
+}
+
+.score-ring {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 180px;
+
+  circle {
+    transition: stroke-dashoffset 0.6s ease;
+  }
+
+  &__text {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__number {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: $text-primary;
+    line-height: 1;
+  }
+
+  &__max {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $text-secondary;   // ⬅ muted ki jagah secondary — zyada visible
+    margin-top: 0.25rem;
+  }
+}
+
+.stripe-loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 10, 14, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.stripe-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 90%;
+  max-width: 420px;
+
+  &__label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $text-primary;
+  }
+
+  &__track {
+    width: 100%;
+    height: 22px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid $card-border;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  &__fill {
+    height: 100%;
+    background: repeating-linear-gradient(
+      45deg,
+      $accent-cyan,
+      $accent-cyan 10px,
+      $accent-cyan-hover 10px,
+      $accent-cyan-hover 20px
+    );
+    background-size: 200% 100%;
+    animation: stripe-move 1s linear infinite;
+    transition: width 0.4s ease;
+    border-radius: 12px 0 0 12px;
+  }
+
+  &__percent {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: $accent-cyan;
+  }
+}
+
+@keyframes stripe-move {
+  from { background-position: 0 0; }
+  to { background-position: 40px 0; }
+}
+
+.session-footer {
+  display: flex;
+  justify-content: center;
+
+  .generate-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 1rem 2.25rem;
+    background: $accent-cyan;
+    color: $step-text;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 0 25px rgba(178, 245, 234, 0.3);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $accent-cyan-hover;
+      transform: translateY(-2px);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+}
+
+.result-hero {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 20px;
+  padding: 2.5rem;
+  backdrop-filter: blur(16px);
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.5rem;
+  }
+}
+
+.score-bar-hero {
+  flex: 1 1 260px;   // ⬅ ab yeh proper width lega, chhota nahi rahega
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;   // ⬅ isse label aur number chipkenge nahi
+  }
+
+  &__label {
+    font-size: 0.85rem;
+    color: $text-secondary;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  &__number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $text-primary;
+    white-space: nowrap;
+  }
+}
+
+.result-hero__summary {
+  flex: 1 1 320px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  p {
+    font-size: 0.95rem;
+    color: $text-secondary;
+    line-height: 1.6;
+  }
+}
+
+.result-footer {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 1rem;
+  padding-top: 0.5rem;
+
+  .generate-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 1rem 2rem;
+    background: $accent-cyan;
+    color: $step-text;
+    border: none;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 0 25px rgba(178, 245, 234, 0.3);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $accent-cyan-hover;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.mock-interview-wrapper {
+  position: relative;
+}
+
+.home-nav-btn {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 30px;
+  color: $text-primary;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: $accent-cyan;
+    border-color: $card-border-focus;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 600px) {
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem 0.9rem;
+
+    span {
+      display: none; // chhote screen pe sirf icon dikhega, text nahi
+    }
+  }
+}

@@ -6,6 +6,7 @@ import { Grid2x2, Eye, EyeOff } from "lucide-react"
 import { FcGoogle } from "react-icons/fc"
 import { FaGithub } from "react-icons/fa"
 import registerImage from "../../../assets/images/authImages/register.png"
+import LoadingBar from "../../interview/components/LoadingBar"
 
 export const Register = () => {
     const navigate = useNavigate();
@@ -28,20 +29,11 @@ export const Register = () => {
         navigate("/")
     }
 
-    if (loading) {
-        return (
-            <div className="loading-screen">
-                <div className="loading-content">
-                    <Grid2x2 className="loading-brand-icon" size={32} />
-                    <div className="loader"></div>
-                    <p>Creating account...</p>
-                </div>
-            </div>
-        )
-    }
+    
 
     return (
         <main className="auth-page">
+            {loading && <LoadingBar label="Creating your account" />}
             <div className="auth-card">
 
                 {/* Left side - visual + tagline */}

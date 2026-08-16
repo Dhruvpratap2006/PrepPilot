@@ -137,28 +137,23 @@ async function generateResumePDFController(req, res) {
  */
 
 async function submitMockInterviewController(req, res) {
-
    try {
      const { interviewData } = req.body;
-
-    if (!interviewData || interviewData.length === 0) {
+    if(!interviewData || interviewData.length === 0) {
         return res.status(400).json({message : "Interview data is required"})
     }
-
     const feedback = await generateMockInterviewFeedback(interviewData);
-
     const savedInterview = await mockInterviewModel.create({
         user : req.user.id,
         interviewData,
         feedback
     });
-
      res.status(201).json({
             message: "Mock interview feedback generated successfully",
             interview: savedInterview,
         });
-
     } catch (err) {
+        console.error("Error submitting mock interview:", err);   // yeh line add kar
         res.status(500).json({
             message: "Something went wrong while generating feedback",
             error: err.message,

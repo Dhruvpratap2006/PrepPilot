@@ -42,23 +42,78 @@ const generateInterviewReportSchema = z.object({
 
 async function generateInterviewReport({resume, jobDescription, selfDescription}) {
 
+    const generateInterviewReportManualSchema = {
+        type: "object",
+        properties: {
+            title: { type: "string" },
+            matchScore: { type: "number" },
+            technicalQuestions: {
+                type: "array",
+                items: {
+                    type: "object",
+                    properties: {
+                        question: { type: "string" },
+                        intention: { type: "string" },
+                        answer: { type: "string" },
+                    },
+                    required: ["question", "intention", "answer"],
+                },
+            },
+            behavioralQuestions: {
+                type: "array",
+                items: {
+                    type: "object",
+                    properties: {
+                        question: { type: "string" },
+                        intention: { type: "string" },
+                        answer: { type: "string" },
+                    },
+                    required: ["question", "intention", "answer"],
+                },
+            },
+            skillGaps: {
+                type: "array",
+                items: {
+                    type: "object",
+                    properties: {
+                        skill: { type: "string" },
+                        severity: { type: "string", enum: ["low", "medium", "high"] },
+                    },
+                    required: ["skill", "severity"],
+                },
+            },
+            preparationPlan: {
+                type: "array",
+                items: {
+                    type: "object",
+                    properties: {
+                        day: { type: "number" },
+                        focus: { type: "string" },
+                        tasks: { type: "array", items: { type: "string" } },
+                    },
+                    required: ["day", "focus", "tasks"],
+                },
+            },
+        },
+        required: ["title", "matchScore", "technicalQuestions", "behavioralQuestions", "skillGaps", "preparationPlan"],
+    };
+
      const prompt = `Generate an interview report for a candidate with the following details:
                         Resume: ${resume}
                         Self Description: ${selfDescription}
                         Job Description: ${jobDescription}
-    `
 
+Return the title as the job title/role being interviewed for (extracted from the job description).
+    `
 
     const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents : prompt,
         config: {
           responseMimeType: "application/json",
-          responseSchema: zodToJsonSchema(generateInterviewReportSchema),
+          responseSchema: generateInterviewReportManualSchema,
       }
     })
-
-  
 
     return JSON.parse(response.text)
 }

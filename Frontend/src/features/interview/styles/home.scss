@@ -67,7 +67,7 @@ html, body {
   margin-bottom: 0;
 
   .eyebrow {
-    font-size: 0.8rem;
+    font-size: 1.4rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -541,5 +541,82 @@ html, body {
       color: #f87171;
       background: rgba(248, 113, 113, 0.12);
     }
+  }
+}
+
+// Action Selection Grid — two equal cards for choosing report vs mock interview
+.action-grid {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.action-card {
+  background: $card-bg;
+  border: 1px solid $card-border;
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+
+  &:hover {
+    border-color: $card-border-focus;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  }
+
+  &--active {
+    border-color: $card-border-focus;
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.3);
+  }
+
+  &__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(56, 189, 248, 0.12);
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  p {
+    font-size: 0.88rem;
+    color: $text-secondary;
+    line-height: 1.5;
+  }
+
+  &__cta {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: $accent-cyan;
   }
 }
