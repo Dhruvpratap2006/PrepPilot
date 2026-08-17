@@ -1,676 +1,3 @@
-// Theme Variables
-$bg-color: #081018;
-$card-bg: rgba(14, 25, 37, 0.7);
-$card-border: rgba(56, 189, 248, 0.12);
-$accent-cyan: #38bdf8;
-$text-primary: #f8fafc;
-$text-secondary: #94a3b8;
-$text-muted: #64748b;
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background-color: $bg-color;
-  color: $text-primary;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  min-height: 100vh;
-}
-
-// Main Page Container - Wider container & better padding
-.interview-page {
-  position: relative;
-  min-height: 100vh;
-  padding: 1.75rem 1.5rem 8rem;   // ⬅ top tighten kiya (2.5rem → 1.75rem)
-  max-width: 720px;
-  margin: 0 auto;
-
-  // soft fade backdrop peeche floating button ke — overlap ko clean banata hai
-  &::after {
-    content: '';
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 130px;
-    background: linear-gradient(to top, $bg-color 40%, transparent);
-    pointer-events: none;
-    z-index: 90;
-  }
-}
-
-.interview-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 2.25rem;
-}
-
-.interview-divider {
-  display: none;
-}
-
-// ── Top Sidebar Cards ──
-.interview-sidebar {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.sidebar-card {
-  background: $card-bg;
-  border: 1px solid $card-border;
-  border-radius: 20px;
-  padding: 1.5rem 1.25rem;
-  backdrop-filter: blur(12px);
-
-  p.match-score__label,
-  p.skill-gaps__label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: $text-secondary;
-    margin-bottom: 1.25rem;
-  }
-}
-
-// ── Dynamic Percentage Progress Ring ──
-.match-score {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  &__ring {
-    position: relative;
-    width: 105px;
-    height: 105px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0.5rem 0 1.25rem;
-
-    background: conic-gradient(
-      #38bdf8 0% var(--score-pct, 0%), 
-      rgba(56, 189, 248, 0.1) var(--score-pct, 0%) 100%
-    );
-    box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
-
-    &.score--mid {
-      background: conic-gradient(
-        #facc15 0% var(--score-pct, 0%), 
-        rgba(250, 204, 21, 0.1) var(--score-pct, 0%) 100%
-      );
-      box-shadow: 0 0 25px rgba(250, 204, 21, 0.25);
-    }
-
-    &.score--low {
-      background: conic-gradient(
-        #f87171 0% var(--score-pct, 0%), 
-        rgba(248, 113, 113, 0.1) var(--score-pct, 0%) 100%
-      );
-      box-shadow: 0 0 25px rgba(248, 113, 113, 0.25);
-    }
-  }
-
-  &__inner {
-    width: 91px;
-    height: 91px;
-    border-radius: 50%;
-    background-color: #0d1925;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__value {
-    font-size: 2rem;
-    font-weight: 800;
-    color: $text-primary;
-  }
-
-  &__pct {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: $text-secondary;
-  }
-
-  &__sub {
-    font-size: 0.8rem;
-    color: $text-muted;
-    text-align: center;
-  }
-}
-
-// ── Skill Gaps ──
-.skill-gaps {
-  &__list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .skill-tag {
-    background: rgba(56, 189, 248, 0.06);
-    border: 1px solid rgba(56, 189, 248, 0.12);
-    border-radius: 12px;
-    padding: 0.75rem 0.9rem;
-    font-size: 0.82rem;
-    line-height: 1.35;
-    color: #f1f5f9;
-
-    &--high {
-      color: #fca5a5;
-      border-color: rgba(239, 68, 68, 0.2);
-      background: rgba(239, 68, 68, 0.08);
-    }
-  }
-}
-
-// ── Navigation Tabs ──
-.interview-nav {
-  display: flex;
-  flex-direction: column;
-
-  .nav-content {
-    display: flex;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  &__item {
-    flex: 1;
-    background: transparent;
-    border: none;
-    padding: 1rem 0.5rem;
-    color: $text-secondary;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    position: relative;
-    transition: color 0.2s ease;
-
-    &--active {
-      color: $text-primary;
-
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background-color: #ffffff;
-      }
-    }
-  }
-
-  // Floating Download Resume Button
-  .primary-button {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 3rem);
-    max-width: 480px;
-    padding: 1.1rem;
-    background: #38bdf8;
-    color: #06131e;
-    border: none;
-    border-radius: 20px;
-    font-size: 1rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    box-shadow: 0 4px 30px rgba(56, 189, 248, 0.4);
-    cursor: pointer;
-    z-index: 100;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: #7dd3fc;
-    }
-
-    &:active {
-      transform: translateX(-50%) scale(0.98);
-    }
-  }
-
-  .secondary-button {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 3rem);
-    max-width: 480px;
-    padding: 1.1rem;
-    background: #38bdf8;
-    color: #06131e;
-    border: none;
-    border-radius: 20px;
-    font-size: 1rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    box-shadow: 0 4px 30px rgba(56, 189, 248, 0.4);
-    cursor: pointer;
-    z-index: 100;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: #7dd3fc;
-    }
-
-    &:active {
-      transform: translateX(-50%) scale(0.98);
-    }
-  }
-}
-
-// ── Content Sections ──
-.interview-content {
-  padding-bottom: 7rem;   // ⬅ NAYA — floating button se overlap na ho, extra clearance
-
-  .content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-
-    h2 {
-      font-size: 0.85rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: $text-primary;
-    }
-
-    &__count {
-      font-size: 0.8rem;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 0.4rem 0.85rem;
-      border-radius: 20px;
-      color: $text-secondary;
-    }
-  }
-}
-
-// Question Cards List
-.q-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.15rem;
-}
-
-.q-card {
-  background: $card-bg;
-  border: 1px solid $card-border;
-  border-radius: 20px;
-  overflow: hidden;
-  backdrop-filter: blur(12px);
-
-  &__header {
-    padding: 1.35rem 1.25rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    cursor: pointer;
-  }
-
-  &__index {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(56, 189, 248, 0.12);
-    border: 1px solid rgba(56, 189, 248, 0.25);
-    color: #38bdf8;
-    font-size: 0.85rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  &__question {
-    font-size: 0.98rem;
-    font-weight: 600;
-    line-height: 1.5;
-    color: #f1f5f9;
-    flex: 1;
-  }
-
-  &__chevron {
-    color: $text-secondary;
-    transition: transform 0.2s ease;
-    margin-top: 6px;
-
-    &--open {
-      transform: rotate(180deg);
-    }
-  }
-
-  &__body {
-    padding: 0 1.25rem 1.35rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    flex-direction: column;
-    gap: 1.15rem;
-    margin-top: 0.75rem;
-  }
-
-  &__section {
-    p {
-      font-size: 0.9rem;
-      color: $text-secondary;
-      line-height: 1.55;
-      margin-top: 0.5rem;
-    }
-  }
-
-  &__tag {
-    display: inline-block;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 0.25rem 0.6rem;
-    border-radius: 6px;
-
-    &--intention {
-      background: rgba(234, 179, 8, 0.12);
-      color: #facc15;
-    }
-
-    &--answer {
-      background: rgba(34, 197, 94, 0.12);
-      color: #4ade80;
-    }
-  }
-}
-
-// Roadmap Cards
-.roadmap-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.15rem;
-}
-
-.roadmap-day {
-  background: $card-bg;
-  border: 1px solid $card-border;
-  border-radius: 20px;
-  padding: 1.35rem;
-
-  &__header {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    margin-bottom: 1rem;
-  }
-
-  &__badge {
-    background: rgba(56, 189, 248, 0.15);
-    color: #38bdf8;
-    font-size: 0.78rem;
-    font-weight: 700;
-    padding: 0.3rem 0.75rem;
-    border-radius: 8px;
-  }
-
-  &__focus {
-    font-size: 1rem;
-    font-weight: 600;
-    color: $text-primary;
-  }
-
-  &__tasks {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-
-    li {
-      font-size: 0.9rem;
-      color: $text-secondary;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-  }
-
-  &__bullet {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: $accent-cyan;
-    flex-shrink: 0;
-  }
-}
-
-// Loading View
-.loading-screen {
-  min-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-
-  .loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(255, 255, 255, 0.1);
-    border-top-color: $accent-cyan;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
-  h1 {
-    font-size: 1.1rem;
-    color: $text-primary;
-  }
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-// ── Top Sidebar Grid Container ──
-.interview-sidebar {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-
-  @media (max-width: 580px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.sidebar-card {
-  background: rgba(14, 25, 37, 0.7);
-  border: 1px solid rgba(56, 189, 248, 0.12);
-  border-radius: 20px;
-  padding: 1.5rem 1.25rem;
-  backdrop-filter: blur(12px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  p.match-score__label,
-  p.skill-gaps__label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #94a3b8;
-    margin-bottom: 1rem;
-  }
-}
-
-// ── Match Score Card & Equalizer Spectrum ──
-.match-score {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-
-  &__header {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 0.25rem;
-    margin-bottom: 0.75rem;
-  }
-
-  &__value {
-    font-size: 2.75rem;
-    font-weight: 800;
-    color: #f8fafc;
-    line-height: 1;
-    letter-spacing: -0.03em;
-  }
-
-  &__pct {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #38bdf8;
-  }
-
-  // Equalizer Container
-  .equalizer-bars {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 6px;
-    width: 100%;
-    height: 48px;
-    margin-bottom: 1rem;
-    padding: 0 0.5rem;
-  }
-
-  // Inactive Bars (Default Off State)
-  .equalizer-bar {
-    flex: 1;
-    max-width: 8px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-    // Active Glowing State
-    &--active {
-      background: linear-gradient(to top, #0284c7, #38bdf8);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
-    }
-  }
-
-  &__sub {
-    font-size: 0.78rem;
-    color: #64748b;
-  }
-}
-
-// ── Top Skill Gaps Card ──
-.skill-gaps {
-  &__list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .skill-tag {
-    background: rgba(56, 189, 248, 0.06);
-    border: 1px solid rgba(56, 189, 248, 0.12);
-    border-radius: 12px;
-    padding: 0.75rem 0.9rem;
-    font-size: 0.82rem;
-    line-height: 1.35;
-    color: #f1f5f9;
-
-    &--high {
-      color: #fca5a5;
-      border-color: rgba(239, 68, 68, 0.2);
-      background: rgba(239, 68, 68, 0.08);
-    }
-
-    &--mid {
-      color: #fde047;
-      border-color: rgba(234, 179, 8, 0.2);
-      background: rgba(234, 179, 8, 0.08);
-    }
-
-    &--low {
-      color: #86efac;
-      border-color: rgba(34, 197, 94, 0.2);
-      background: rgba(34, 197, 94, 0.08);
-    }
-  }
-}
-
-// Theme Variables Reference
-$accent-cyan: #38bdf8;
-$card-bg: rgba(14, 25, 37, 0.85);
-
-// ── 1. Top Bar Actions (Home & Mock Interview Buttons) ──
-.interview-top-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  width: 100%;
-
-  .top-action-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.55rem 1rem;
-    border-radius: 12px;
-    background: $card-bg;
-    border: 1px solid rgba(56, 189, 248, 0.15);
-    color: #cbd5e1;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: none;
-    backdrop-filter: blur(8px);
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: rgba(56, 189, 248, 0.1);
-      border-color: rgba(56, 189, 248, 0.35);
-      color: #ffffff;
-      transform: translateY(-1px);
-    }
-
-    // Glow variant for Mock Interview
-    &--glow {
-      border-color: rgba(56, 189, 248, 0.35);
-      color: $accent-cyan;
-
-      &:hover {
-        background: rgba(56, 189, 248, 0.18);
-        border-color: $accent-cyan;
-        box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
-      }
-    }
-  }
-}
-
-// ── 2. Floating Bottom Action Button (Download Resume) ──
-
-
-
 // ── Theme Variables Matching Mock Interview ──
 $bg-primary: #03080e;
 $bg-radial-top: #081a29;
@@ -703,7 +30,6 @@ body {
   max-width: 1140px;
   margin: 0 auto;
 
-  // Top Radial Ambient Glow
   &::before {
     content: '';
     position: fixed;
@@ -717,7 +43,6 @@ body {
     z-index: 0;
   }
 
-  // Soft bottom fade for floating button
   &::after {
     content: '';
     position: fixed;
@@ -745,7 +70,7 @@ body {
     align-items: center;
     gap: 0.55rem;
     padding: 0.6rem 1.15rem;
-    border-radius: 9999px; // Full Pill shape matching image 2
+    border-radius: 9999px;
     background: rgba(10, 24, 38, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.12);
     color: #e2e8f0;
@@ -777,7 +102,7 @@ body {
 
 .interview-layout {
   position: relative;
-  z-index: 10;
+  z-index: 100;
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
@@ -1139,12 +464,42 @@ body {
   }
 }
 
-// ── Floating Action Button (Download Resume) ──
+// Loading View
+.loading-screen {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: $accent-cyan;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  h1 {
+    font-size: 1.1rem;
+    color: $text-primary;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ── Floating Action Button (Download Resume) ──
 .primary-floating-btn {
-  position: sticky;
+  position: fixed;
   bottom: 2.25rem;
-  margin: 2rem auto 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
   width: calc(100% - 3rem);
   max-width: 480px;
   padding: 1.15rem;
@@ -1162,47 +517,21 @@ body {
   cursor: pointer;
   z-index: 100;
 
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+
+  &--visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
   &:hover {
     background: #1d4ed8;
   }
 
   &:active {
-    transform: scale(0.98);
-  }
-}
-
-// ── Floating Action Button (.button.primary-button) ──
-.button.primary-button {
-  position: fixed;
-  bottom: 2.25rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 3rem);
-  max-width: 440px;
-  padding: 1rem 1.75rem;
-  background: #38bdf8;
-  color: #03080e;
-  border: none;
-  border-radius: 9999px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  box-shadow: 0 4px 28px rgba(56, 189, 248, 0.45);
-  cursor: pointer;
-  z-index: 100;
-  text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover {
-    background: #7dd3fc;
-    box-shadow: 0 6px 36px rgba(56, 189, 248, 0.6);
-    transform: translateX(-50%) translateY(-2px);
-  }
-
-  &:active {
-    transform: translateX(-50%) scale(0.97);
+    transform: translateX(-50%) scale(0.98);
   }
 } 
