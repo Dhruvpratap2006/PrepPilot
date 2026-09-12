@@ -176,16 +176,14 @@ async function loginUserController(req, res) {
  */
 
 async function logoutUserController(req, res) {
-    // for logout we are going to clear the cookie which we have set for the user
-    const token = req.cookies.token;
-
-    if (token) {
-        await tokenBlackListModel.create({ token }) // we are going to store the logged-out token in a blacklist
+    try {
+        const token = req.cookies.token;
+        if (token) await tokenBlackListModel.create({ token });
+        res.clearCookie("token");
+        res.status(200).json({ message: "User logged out successfully" });
+    } catch (err) {
+        res.status(500).json({ message: "Logout failed", error: err.message });
     }
-    res.clearCookie("token");
-    res.status(200).json({
-        message: "User logged out successfully"
-    })
 }
 
 //  controller for authMiddleware which is get-me
