@@ -17,7 +17,7 @@ connectToDB(); // function to connect with dataBase
 
 // this is the port on which our server will listen the
 // the incoming request  
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
