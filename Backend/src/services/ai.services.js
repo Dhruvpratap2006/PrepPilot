@@ -120,7 +120,9 @@ Return the title as the job title/role being interviewed for (extracted from the
 
 // here we are going to use puppeter to generate pdf from html content
 async function generatePdfFromHtml(htmlContent) {
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
+    })
     const page = await browser.newPage();
     await page.setContent(htmlContent, { waitUntil: "networkidle0" })
 
