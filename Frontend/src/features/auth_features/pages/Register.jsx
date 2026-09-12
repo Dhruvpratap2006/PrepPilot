@@ -11,7 +11,7 @@ import LoadingBar from "../../interview/components/LoadingBar"
 export const Register = () => {
     const navigate = useNavigate();
 
-    const {loading, handleRegister} = useAuth();
+    const {loading, error, handleRegister} = useAuth();
 
     const [showPassword, setShowPassword] = useState(false);
     const[username, setUsername] = useState("");
@@ -24,11 +24,13 @@ export const Register = () => {
         window.location.href = `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/auth/google`;
     }; 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        // Handle register logic
-        await handleRegister({username, email, password})
+    e.preventDefault();
+    // Handle register logic
+    const registeredUser = await handleRegister({username, email, password})
+    if (registeredUser) {
         navigate("/")
     }
+}
 
     
 
