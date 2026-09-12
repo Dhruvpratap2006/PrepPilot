@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
     // jab hum axios se request bhejte hain, to by default browser cookies ko 
             // automatically attach nahi karta request ke saath (especially cross-origin requests mein)
             // isliye backend tak cookie pahunchti hi nahi
