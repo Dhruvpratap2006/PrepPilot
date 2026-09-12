@@ -14,7 +14,7 @@ export const Login = () => {
     const location = useLocation();
     const [showPassword, setShowPassword] = useState(false);
 
-    const { loading , handleLogin} = useAuth();
+    const { loading , error, handleLogin} = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -26,15 +26,16 @@ export const Login = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        // Handle login logic
-        await handleLogin({ email, password })
-        // as user gets succesfully login then we can navigete it to 
-        // home page
-        // navigate('/');
+    e.preventDefault();
+    // Handle login logic
+    const loggedInUser = await handleLogin({ email, password })
+    // only redirect if login actually succeeded — otherwise stay on
+    // this page so the error message (shown below) is visible
+    if (loggedInUser) {
         const redirectTo = location.state?.from || "/";
         navigate(redirectTo);
     }
+}
 
     
 
