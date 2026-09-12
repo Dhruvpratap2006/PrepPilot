@@ -1,5 +1,5 @@
 import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf } from '../services/interview.api'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { InterviewContext } from '../interview.context'
 import {useParams} from 'react-router'
 
@@ -7,6 +7,7 @@ export const useInterview = () => {
 
     const context = useContext(InterviewContext)
     const { interviewId } = useParams()
+    const [error, setError] = useState(null)
 
     if (!context) {
         throw new Error("useInterview must be used within an InterviewProvider")
@@ -30,18 +31,20 @@ export const useInterview = () => {
     }
 
     const getReportById = async (interviewId) => {
-        setLoading(true)
-        let response = null
-        try {
-            response = await getInterviewReportById(interviewId)
-            setReport(response.interviewReport)
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setLoading(false)
-        }
-        return response?.interviewReport
+    setLoading(true)
+    setError(null)
+    let response = null
+    try {
+        response = await getInterviewReportById(interviewId)
+        setReport(response.interviewReport)
+    } catch (err) {
+        console.log(err)
+        setError(err.response?.data?.message || "Could not load this report.")
+    } finally {
+        setLoading(false)
     }
+    return response?.interviewReport
+}
 
     const getReports = async () => {
         setLoading(true)
@@ -98,5 +101,5 @@ export const useInterview = () => {
     }, [interviewId])
 
 
-    return { loading, pdfLoading,  report, reports, generateReport, getReportById, getReports, getResumePdf }
+    return { loading, pdfLoading, error, report, reports, generateReport, getReportById, getReports, getResumePdf }
 }

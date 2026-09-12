@@ -107,15 +107,7 @@ const Home = () => {
     navigate('/mock-interview');
   };
 
-  if (loading) {
-    return (
-      <main className="loading-screen">
-        <div className="loading-spinner"></div>
-        <h1>Generating your interview report...</h1>
-        <p className="loading-sub">This usually takes 10–20 seconds</p>
-      </main>
-    );
-  }
+  
 
   return (
     <div className="home-page">
