@@ -119,22 +119,43 @@ Return the title as the job title/role being interviewed for (extracted from the
 }
 
 // here we are going to use puppeter to generate pdf from html content
+// here we are going to use puppeter to generate pdf from html content
 async function generatePdfFromHtml(htmlContent) {
-    const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
-    })
-    const page = await browser.newPage();
-    await page.setContent(htmlContent, { waitUntil: "networkidle0" })
+    let browser = null;
+    try {
+        browser = await puppeteer.launch({
+            headless: "new",
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--no-zygote",
+                "--single-process",
+            ],
+        });
 
-    const pdfBuffer = await page.pdf({
-        format: "A4",
-        margin: { top: "12mm", bottom: "12mm", left: "12mm", right: "12mm" },
-        scale: 0.92
-    })
+        const page = await browser.newPage();
+        
+        // Wait until network is idle so all fonts and styles are fully loaded
+        await page.setContent(htmlContent, { waitUntil: "networkidle0" });
 
-    await browser.close()
+        const pdfBuffer = await page.pdf({
+            format: "A4",
+            margin: { top: "12mm", bottom: "12mm", left: "12mm", right: "12mm" },
+            scale: 0.92,
+            printBackground: true,
+        });
 
-    return pdfBuffer
+        return pdfBuffer;
+    } catch (error) {
+        console.error("Puppeteer PDF generation error:", error);
+        throw error;
+    } finally {
+        if (browser !== null) {
+            await browser.close();
+        }
+    }
 }
 
 async function generateResumePDF({resume, selfDescription, jobDescription}) {
