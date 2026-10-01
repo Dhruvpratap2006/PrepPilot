@@ -1,14 +1,4 @@
-import axios from 'axios';
-
-const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
-    // jab hum axios se request bhejte hain, to by default browser cookies ko 
-            // automatically attach nahi karta request ke saath (especially cross-origin requests mein)
-            // isliye backend tak cookie pahunchti hi nahi
-            // withCredentials: true likhne se axios ko pata chalta hai ki cookies ko bhi
-            // request ke saath bhejo aur backend se aane wali cookies ko bhi accept karo
-    withCredentials : true,
-})
+import api from '../../../services/api.client';
 
 // register user
 export async function registerUser({ username, email, password }) {

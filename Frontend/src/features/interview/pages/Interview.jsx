@@ -78,13 +78,8 @@ const Interview = () => {
     return () => document.removeEventListener('scroll', handleScroll, true)
 }, [])
 
-    if (loading || !report) {
-        return (
-            <main className='loading-screen'>
-                <div className="loading-spinner"></div>
-                <h1>Loading your interview plan...</h1>
-            </main>
-        )
+        if (loading || !report) {
+        return <LoadingBar label="Loading your interview plan" />
     }
 
     const scoreColor =

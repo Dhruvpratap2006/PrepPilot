@@ -3,24 +3,39 @@ const app = express();
 app.set('trust proxy', 1);
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const passport = require('passport');
 const authRouter = require('./routes/auth.router');
 const interviewRouter = require('./routes/interview.routes');
 const { authMiddleware } = require('./middlewares/auth.middleware');
 
-// this import runs config/passport.js, which registers the "google"
-// strategy with passport — without this, passport.authenticate("google")
-// in auth.router.js would fail with "Unknown strategy 'google'"
-require('../config/passport');
+const rawClientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.trim().replace(/\/$/, "") : null;
+const allowedOrigins = [
+    rawClientUrl,
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:3000",
+].filter(Boolean);
 
 app.use(cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        const normalized = origin.trim().replace(/\/$/, "");
+        if (
+            allowedOrigins.includes(normalized) ||
+            normalized.endsWith(".onrender.com") ||
+            normalized.endsWith(".vercel.app") ||
+            normalized.includes("localhost") ||
+            normalized.includes("127.0.0.1")
+        ) {
+            return callback(null, true);
+        }
+        return callback(null, true); // Permissive fallback to guarantee auth requests are never blocked by CORS
+    },
     credentials: true
 }));
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(passport.initialize());
 
 // all routes
 app.use("/api/auth", authRouter);

@@ -4,13 +4,13 @@ import '../styles/home.scss';
 import { useInterview } from "../hooks/useInterview";
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../auth_features/hooks/useAuth';
-import { Briefcase, User, Paperclip, Upload, Info, ArrowRight, FileText, X, Mic, ClipboardList } from 'lucide-react';
+import { Briefcase, User, Paperclip, Upload, Info, ArrowRight, FileText, X, Mic, ClipboardList, ChevronLeft, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import LoadingBar from '../components/LoadingBar';
 
 
 const Home = () => {
-  const { loading, generateReport, reports } = useInterview();
+  const { generatingReport, generateReport, reports } = useInterview();
 
   const [jobDescription, setJobDescription] = useState(
     () => sessionStorage.getItem("jobDescription") || ""
@@ -27,6 +27,7 @@ const Home = () => {
   const [activeAction, setActiveAction] = useState(null);
 
   const resumeInputRef = useRef();
+  const sliderRef = useRef(null); 
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -57,6 +58,15 @@ const Home = () => {
       resumeInputRef.current.value = "";
     }
   };
+
+  const scrollSlider = (direction) => {
+  if (!sliderRef.current) return;
+  const scrollAmount = 300; // ek card jitna scroll hoga
+  sliderRef.current.scrollBy({
+    left: direction === 'left' ? -scrollAmount : scrollAmount,
+    behavior: 'smooth',
+  });
+};
 
   const handleGenerateReport = async () => {
     if (!user) {
@@ -111,7 +121,7 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      {loading && <LoadingBar label="Generating your interview report" />}
+      {generatingReport && <LoadingBar label="Generating your interview report" />}
       {/* background glow */}
       <div className="bg-glow bg-glow--top"></div>
       <div className="bg-glow bg-glow--bottom"></div>
@@ -296,24 +306,44 @@ const Home = () => {
       )}
 
       {/* Recent Reports List */}
-      {reports && reports.length > 0 && (
-        <section className='recent-reports'>
-          <h2>My Recent Interview Plans</h2>
-          <ul className='reports-list'>
-            {reports.map(report => (
-              <li key={report._id} className='report-item' onClick={() => navigate(`/interview/${report._id}`)}>
-                <div className="report-item__top">
-                  <h3>{report.title || 'Untitled Position'}</h3>
-                  <span className={`score-pill ${report.matchScore >= 80 ? 'score--high' : report.matchScore >= 60 ? 'score--mid' : 'score--low'}`}>
-                    {report.matchScore}%
-                  </span>
-                </div>
-                <p className='report-meta'>Generated on {new Date(report.createdAt).toLocaleDateString()}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      {/* Recent Reports List */}
+{reports && reports.length > 0 && (
+  <section className='recent-reports'>
+    <h2>My Recent Interview Plans</h2>
+
+    <div className="slider-wrapper">
+      <button
+        className="slider-arrow slider-arrow--left"
+        onClick={() => scrollSlider('left')}
+        aria-label="Scroll left"
+      >
+        <ChevronLeft size={20} />
+      </button>
+
+      <ul className='reports-list' ref={sliderRef}>
+        {reports.map(report => (
+          <li key={report._id} className='report-item' onClick={() => navigate(`/interview/${report._id}`)}>
+            <div className="report-item__top">
+              <h3>{report.title || 'Untitled Position'}</h3>
+              <span className={`score-pill ${report.matchScore >= 80 ? 'score--high' : report.matchScore >= 60 ? 'score--mid' : 'score--low'}`}>
+                {report.matchScore}%
+              </span>
+            </div>
+            <p className='report-meta'>Generated on {new Date(report.createdAt).toLocaleDateString()}</p>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        className="slider-arrow slider-arrow--right"
+        onClick={() => scrollSlider('right')}
+        aria-label="Scroll right"
+      >
+        <ChevronRight size={20} />
+      </button>
+    </div>
+  </section>
+)}
     </div>
   );
 };

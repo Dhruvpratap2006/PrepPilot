@@ -1,10 +1,6 @@
 // here we are going to write our servers
 
-require('dotenv').config(); // we are using dotenv to load 
-// environment variables from .env file to process.env file
-// this must run before app.js is required — app.js requires the passport
-// config, which reads process.env.GOOGLE_CLIENT_ID as soon as it loads,
-// so the env variables need to already be in place by then
+require('dotenv').config(); // Load environment variables from .env
 
 
 const app = require('./src/app.js');
@@ -19,6 +15,6 @@ connectToDB(); // function to connect with dataBase
 // the incoming request  
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
-})
+});

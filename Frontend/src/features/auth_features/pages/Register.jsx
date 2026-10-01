@@ -3,36 +3,30 @@ import { useNavigate, Link } from "react-router"
 import { useAuth } from "../hooks/useAuth"
 import { useState } from "react"
 import { Grid2x2, Eye, EyeOff } from "lucide-react"
-import { FcGoogle } from "react-icons/fc"
-import { FaGithub } from "react-icons/fa"
 import registerImage from "../../../assets/images/authImages/register.png"
 import LoadingBar from "../../interview/components/LoadingBar"
+import toast from "react-hot-toast"
 
 export const Register = () => {
     const navigate = useNavigate();
 
-    const {loading, error, handleRegister} = useAuth();
+    const { loading, error, handleRegister } = useAuth();
 
     const [showPassword, setShowPassword] = useState(false);
-    const[username, setUsername] = useState("");
-    const[email, setEmail] = useState("");
-    const[password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    const handleGoogleLogin = () => {
-  // Direct browser redirect to backend OAuth endpoint
-        // window.location.href = "http://localhost:3000/api/auth/google";
-        window.location.href = `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/auth/google`;
-    }; 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Handle register logic
-    const registeredUser = await handleRegister({username, email, password})
-    if (registeredUser) {
-        navigate("/")
-    }
-}
-
-    
+        e.preventDefault();
+        const registeredUser = await handleRegister({ username, email, password });
+        if (registeredUser) {
+            toast.success("Account created successfully!");
+            navigate("/");
+        } else {
+            toast.error(error || "Registration failed. Please try again.");
+        }
+    };
 
     return (
         <main className="auth-page">
@@ -64,6 +58,20 @@ export const Register = () => {
                         <p className="subtitle">
                             Already have an account? <Link to="/login">Login here</Link>
                         </p>
+
+                        {error && (
+                            <div style={{
+                                color: "#f87171",
+                                background: "rgba(248, 113, 113, 0.1)",
+                                border: "1px solid rgba(248, 113, 113, 0.3)",
+                                borderRadius: "8px",
+                                padding: "10px 14px",
+                                marginBottom: "16px",
+                                fontSize: "0.88rem"
+                            }}>
+                                {error}
+                            </div>
+                        )}
 
                         <form onSubmit={handleSubmit}>
                             {/* Username */}
@@ -113,17 +121,6 @@ export const Register = () => {
 
                             <button type="submit" className="button primary-button">Create Account</button>
                         </form>
-
-                        <div className="divider"><span>Or</span></div>
-
-                        {/* Social Registration */}
-                        <div className="social-auth-buttons">
-                            <button onClick={handleGoogleLogin} type="button" className="btn-social google">
-                                <FcGoogle size={18} />
-                                <span>Sign up with Google</span>
-                            </button>
-                            
-                        </div>
 
                     </div>
                 </div>

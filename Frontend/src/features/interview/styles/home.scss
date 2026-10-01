@@ -620,3 +620,30 @@ html, body {
     color: $accent-cyan;
   }
 }
+
+.slider-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.slider-arrow {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid $card-border;
+  background: $card-bg;
+  color: $accent-cyan;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: $card-border-focus;
+    background: rgba(56, 189, 248, 0.12);
+  }
+}

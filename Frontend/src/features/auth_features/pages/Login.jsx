@@ -3,41 +3,32 @@ import { useNavigate, Link } from "react-router"
 import { useLocation } from "react-router";
 import { useState } from "react"
 import { Grid2x2, Eye, EyeOff } from "lucide-react"
-import { FcGoogle } from "react-icons/fc"
-import { FaGithub } from "react-icons/fa"
 import loginImage from "../../../assets/images/authImages/LOGIN.png"
 import { useAuth } from "../hooks/useAuth"
 import LoadingBar from "../../interview/components/LoadingBar";
+import toast from "react-hot-toast";
 
 export const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [showPassword, setShowPassword] = useState(false);
 
-    const { loading , error, handleLogin} = useAuth();
+    const { loading, error, handleLogin } = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleGoogleLogin = () => {
-    // Direct browser redirect to backend OAuth endpoint
-        // window.location.href = "http://localhost:3000/api/auth/google";
-        window.location.href = `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/auth/google`;
-    };
-
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Handle login logic
-    const loggedInUser = await handleLogin({ email, password })
-    // only redirect if login actually succeeded — otherwise stay on
-    // this page so the error message (shown below) is visible
-    if (loggedInUser) {
-        const redirectTo = location.state?.from || "/";
-        navigate(redirectTo);
-    }
-}
-
-    
+        e.preventDefault();
+        const loggedInUser = await handleLogin({ email, password });
+        if (loggedInUser) {
+            toast.success("Welcome back!");
+            const redirectTo = location.state?.from || "/";
+            navigate(redirectTo);
+        } else {
+            toast.error(error || "Invalid email or password");
+        }
+    };
 
     return (
         <main className="auth-page">
@@ -69,6 +60,20 @@ export const Login = () => {
                             Don't have an account? <Link to="/register">Register here</Link>
                         </p>
 
+                        {error && (
+                            <div style={{
+                                color: "#f87171",
+                                background: "rgba(248, 113, 113, 0.1)",
+                                border: "1px solid rgba(248, 113, 113, 0.3)",
+                                borderRadius: "8px",
+                                padding: "10px 14px",
+                                marginBottom: "16px",
+                                fontSize: "0.88rem"
+                            }}>
+                                {error}
+                            </div>
+                        )}
+
                         <form onSubmit={handleSubmit}>
                             {/* Email */}
                             <div className="input-group">
@@ -90,7 +95,7 @@ export const Login = () => {
                                         type={showPassword ? "text" : "password"} 
                                         id="password" 
                                         name="password" 
-                                        placeholder="Input Password"
+                                        placeholder="Input Password" 
                                         required 
                                     />
                                     <button 
@@ -103,23 +108,8 @@ export const Login = () => {
                                 </div>
                             </div>
 
-                            {/* <div className="forgot-password">
-                                <Link to="/forgot-password">Forgot Password?</Link>
-                            </div> */}
-
                             <button type="submit" className="button primary-button">Log in</button>
                         </form>
-
-                        <div className="divider"><span>Or</span></div>
-
-                        {/* Social Login */}
-                        <div className="social-auth-buttons">
-                            <button onClick={handleGoogleLogin} type="button" className="btn-social google">
-                                <FcGoogle size={18} />
-                                <span>Continue with Google</span>
-                            </button>
-                            
-                        </div>
 
                     </div>
                 </div>

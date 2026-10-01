@@ -1,10 +1,9 @@
 const dns = require('dns');
-dns.setServers(['8.8.8.8', '8.8.4.4']);
-
-// Fix: Windows systems sometimes fail to resolve MongoDB's SRV DNS records 
-// (mongodb+srv:// connection strings), causing "querySrv ECONNREFUSED" error.
-// Forcing Google's public DNS servers here fixes this resolution issue.
-// Same fix used earlier in Roamio project for the same error.
+// Windows systems sometimes fail to resolve MongoDB SRV DNS records,
+// so use Google public DNS only on Windows, keeping host DNS on Linux/production
+if (process.platform === 'win32') {
+    dns.setServers(['8.8.8.8', '8.8.4.4']);
+}
 
 const mongoose = require('mongoose');
 

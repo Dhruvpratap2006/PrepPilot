@@ -50,12 +50,16 @@ const jwt = require('jsonwebtoken');
 const tokenBlackListModel = require("../models/blacklist.model")
 
 async function authMiddleware(req, res, next) {
-    const token = req.cookies.token;
+    let token = req.cookies?.token;
+
+    if (!token && req.headers.authorization && req.headers.authorization.startsWith("Bearer ")) {
+        token = req.headers.authorization.split(" ")[1];
+    }
 
     if (!token) {
         return res.status(401).json({
             message: "Token not provided. Unauthorized access, please login first"
-        })
+        });
     }
 
     try {
@@ -64,7 +68,7 @@ async function authMiddleware(req, res, next) {
         if (isBlackListToken) {
             return res.status(401).json({
                 message: "Invalid token.."
-            })
+            });
         }
 
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
@@ -73,7 +77,7 @@ async function authMiddleware(req, res, next) {
     } catch (err) {
         return res.status(401).json({
             message: "Invalid token"
-        })
+        });
     }
 }
 
