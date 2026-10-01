@@ -4,7 +4,7 @@
 
 **Your AI co-pilot for interview day — resume analysis, skill-gap detection, ATS resume generation, and AI mock interviews, built on the MERN stack.**
 
-[![Live Demo](https://img.shields.io/badge/Demo-Live_Site-4ADE80?style=for-the-badge&logo=render&logoColor=white)](https://prep-pilot-frtk.onrender.com)
+[![Live Demo]([https://img.shields.io/badge/Demo-Live_Site-4ADE80?style=for-the-badge&logo=render&logoColor=white)](https://prep-pilot-frtk.onrender.com](https://prep-pilot-tau-three.vercel.app/))
 [![GitHub](https://img.shields.io/badge/Repo-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Dhruvpratap2006/PrepPilot)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dhruv-pratap-1a3aaa344/)
 
