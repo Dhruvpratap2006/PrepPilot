@@ -4,7 +4,7 @@
 
 **Your AI co-pilot for interview day — resume analysis, skill-gap detection, ATS resume generation, and AI mock interviews, built on the MERN stack.**
 
-[![Live Demo]([https://img.shields.io/badge/Demo-Live_Site-4ADE80?style=for-the-badge&logo=render&logoColor=white)](https://prep-pilot-frtk.onrender.com](https://prep-pilot-tau-three.vercel.app/))
+[![Live Demo](https://img.shields.io/badge/Demo-Live_Site-4ADE80?style=for-the-badge&logo=vercel&logoColor=white)](https://prep-pilot-tau-three.vercel.app/)
 [![GitHub](https://img.shields.io/badge/Repo-GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Dhruvpratap2006/PrepPilot)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dhruv-pratap-1a3aaa344/)
 
@@ -18,7 +18,7 @@ PrepPilot takes a candidate's resume and a target job description and generates 
 
 ## Features
 
-- 🔐 Auth with email/password + Google OAuth (Passport.js), JWT in httpOnly cookies
+- 🔐 Email/password authentication with JWT stored in httpOnly cookies
 - 📄 Resume + job description analysis — match score & top skill gaps
 - 🤖 AI-generated interview report (Google Gemini)
 - 📝 ATS-optimized resume generation, exported as a PDF (Puppeteer)
@@ -27,7 +27,7 @@ PrepPilot takes a candidate's resume and a target job description and generates 
 
 ## Tech Stack
 
-`React 19` `Vite` `Node.js` `Express 5` `MongoDB + Mongoose` `Passport.js` `Google Gemini API` `Puppeteer` `SCSS` `Render`
+`React 19` `Vite` `Node.js` `Express 5` `MongoDB + Mongoose` `JWT` `Google Gemini API` `Puppeteer` `SCSS` `Vercel` `Render`
 
 ## Screenshots
 
@@ -55,8 +55,6 @@ NODE_ENV=development
 MONGO_URL=your_mongodb_uri
 JWT_SECRET=your_jwt_secret
 CLIENT_URL=http://localhost:5173
-GOOGLE_CLIENT_ID=your_google_oauth_client_id
-GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
 GOOGLE_GENAI_API_KEY=your_gemini_api_key
 ```
 
