@@ -28,3 +28,4 @@ remaining.txt
 .env
 .env.*
 !.env.example
+!.env.production
