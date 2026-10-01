@@ -31,13 +31,17 @@ PrepPilot takes a candidate's resume and a target job description and generates 
 
 ## Screenshots
 
-| Home | Interview Report |
+| Home | Login |
 |---|---|
-| ![Home](public/images/home.png) | ![Report](public/images/interview-report.png) |
+| ![Home](Frontend/public/images/home.png) | ![Login](Frontend/public/images/login.png) |
 
-| Mock Interview | Login |
+| Register | Interview Report |
 |---|---|
-| ![Mock Interview](public/images/mock-interview.png) | ![Login](public/images/login-page.png) |
+| ![Register](Frontend/public/images/register.png) | ![Interview Report](Frontend/public/images/interview-report.png) |
+
+| Mock Interview | Sample Question |
+|---|---|
+| ![Mock Interview](Frontend/public/images/mock-interview.png) | ![Sample Question](Frontend/public/images/sample-question-example.png) |
 
 ## Run it locally
 
