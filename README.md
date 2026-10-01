@@ -37,7 +37,7 @@ PrepPilot takes a candidate's resume and a target job description and generates 
 
 | Register | Interview Report |
 |---|---|
-| ![Register](Frontend/public/images/register.png) | ![Interview Report](Frontend/public/images/interview-report.png) |
+| ![Register](Frontend/public/images/register.png) | ![Interview Report](Frontend/public/images/interview-rerport.png) |
 
 | Mock Interview | Sample Question | 
 |---|---|
