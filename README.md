@@ -2,7 +2,6 @@
 
 # 🤖 PrepPilot
 
-
 **Your AI co-pilot for interview day — resume analysis, skill-gap detection, ATS resume generation, and AI mock interviews, built on the MERN stack.**
 
 [![Live Demo](https://img.shields.io/badge/Demo-Live_Site-4ADE80?style=for-the-badge&logo=vercel&logoColor=white)](https://prep-pilot-tau-three.vercel.app/)
